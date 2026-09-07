@@ -1,0 +1,992 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-canvas: #FAF8F5;
+  --bg-surface: #FAF8F5;
+  --border-subtle: #E6DFD5;
+  --text-primary: #000000;
+  --text-secondary: #3F3D56;
+  --accent-indigo: #6366F1;
+  --accent-navy: #3F3D56;
+}
+
+body {
+  background-color: var(--bg-canvas);
+  color: var(--text-secondary);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Instrument Serif', Georgia, serif;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  font-weight: 400;
+}
+
+/* Institutional Architectural Blueprint Card */
+.editorial-card {
+  background-color: #FAF8F5;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 1px 3px 0 rgba(63, 61, 86, 0.03);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.editorial-card:hover {
+  border-color: #d1c7b8;
+  box-shadow: 0 10px 25px -5px rgba(63, 61, 86, 0.06);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-canvas);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d6cbbf;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b5a899;
+}
+
+/* =========================================================================
+    SUBTLE KINETIC GEOMETRIC ROTATION & DRIFT KEYFRAMES
+   ========================================================================= */
+
+@keyframes geometricRotateClockwise {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes geometricRotateCounter {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+/* =========================================================================
+   AERIAL BOAT & HUMAN SAILOR NAVIGATION LOOP
+   Rows up, turns 180°, rows down, turns 180°, continuous aquatic cycle
+   ========================================================================= */
+@keyframes boatRowingUpTurnDownLoop {
+  0% {
+    transform: translateY(75vh) translateX(0px) rotate(0deg);
+    opacity: 0.30;
+  }
+  6% {
+    opacity: 0.48;
+  }
+  42% {
+    transform: translateY(5vh) translateX(-8px) rotate(0deg);
+    opacity: 0.48;
+  }
+  48% {
+    transform: translateY(2vh) translateX(12px) rotate(90deg);
+    opacity: 0.40;
+  }
+  52% {
+    transform: translateY(4vh) translateX(24px) rotate(180deg);
+    opacity: 0.40;
+  }
+  92% {
+    transform: translateY(74vh) translateX(20px) rotate(180deg);
+    opacity: 0.48;
+  }
+  96% {
+    transform: translateY(78vh) translateX(10px) rotate(270deg);
+    opacity: 0.35;
+  }
+  100% {
+    transform: translateY(75vh) translateX(0px) rotate(360deg);
+    opacity: 0.30;
+  }
+}
+
+/* =========================================================================
+   TWO KOI FISH DYNAMIC CHASE & PLAY SWIMMING ANIMATIONS (LIVE WALLPAPER EFFECT)
+   One Light Red (Akane/Kohaku) & One Light Blue (Asagi/Cyan)
+   Independent non-synchronous mathematical parametric trajectories
+   ========================================================================= */
+
+/* Koi 1 (Light Red / Coral) - Organic swimming & chasing path */
+@keyframes koiRedChasePath {
+  0% {
+    transform: translate3d(0vw, 78vh, 0) rotate(0deg);
+    opacity: 0.35;
+  }
+  15% {
+    transform: translate3d(8vw, 56vh, 0) rotate(-18deg);
+    opacity: 0.48;
+  }
+  30% {
+    transform: translate3d(-4vw, 36vh, 0) rotate(14deg);
+    opacity: 0.44;
+  }
+  42% {
+    transform: translate3d(6vw, 16vh, 0) rotate(-22deg);
+    opacity: 0.50;
+  }
+  50% {
+    /* Sweeping turn at top */
+    transform: translate3d(-2vw, 4vh, 0) rotate(78deg);
+    opacity: 0.42;
+  }
+  58% {
+    /* Heading downward chasing Koi 2 */
+    transform: translate3d(8vw, 18vh, 0) rotate(165deg);
+    opacity: 0.46;
+  }
+  72% {
+    transform: translate3d(-6vw, 44vh, 0) rotate(198deg);
+    opacity: 0.48;
+  }
+  85% {
+    transform: translate3d(4vw, 66vh, 0) rotate(172deg);
+    opacity: 0.45;
+  }
+  94% {
+    /* Playful spiral at bottom */
+    transform: translate3d(-3vw, 82vh, 0) rotate(260deg);
+    opacity: 0.38;
+  }
+  100% {
+    transform: translate3d(0vw, 78vh, 0) rotate(360deg);
+    opacity: 0.35;
+  }
+}
+
+/* Koi 2 (Light Blue / Azure) - Independent chasing trajectory with phase offset & wider sweeps */
+@keyframes koiBlueChasePath {
+  0% {
+    transform: translate3d(6vw, 84vh, 0) rotate(15deg);
+    opacity: 0.32;
+  }
+  12% {
+    transform: translate3d(-3vw, 68vh, 0) rotate(-25deg);
+    opacity: 0.45;
+  }
+  26% {
+    transform: translate3d(7vw, 48vh, 0) rotate(20deg);
+    opacity: 0.50;
+  }
+  38% {
+    transform: translate3d(-7vw, 25vh, 0) rotate(-16deg);
+    opacity: 0.46;
+  }
+  46% {
+    /* Agile playful darting around Koi 1 */
+    transform: translate3d(3vw, 10vh, 0) rotate(45deg);
+    opacity: 0.52;
+  }
+  54% {
+    transform: translate3d(9vw, 6vh, 0) rotate(135deg);
+    opacity: 0.44;
+  }
+  65% {
+    transform: translate3d(-5vw, 28vh, 0) rotate(190deg);
+    opacity: 0.48;
+  }
+  78% {
+    transform: translate3d(5vw, 52vh, 0) rotate(168deg);
+    opacity: 0.46;
+  }
+  88% {
+    transform: translate3d(-7vw, 72vh, 0) rotate(210deg);
+    opacity: 0.42;
+  }
+  96% {
+    transform: translate3d(2vw, 86vh, 0) rotate(295deg);
+    opacity: 0.36;
+  }
+  100% {
+    transform: translate3d(6vw, 84vh, 0) rotate(375deg);
+    opacity: 0.32;
+  }
+}
+
+/* Organic fish tail undulation (subtle aquatic sinusoidal swish) */
+@keyframes koiTailWaggle1 {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(14deg);
+  }
+  50% {
+    transform: rotate(-2deg);
+  }
+  75% {
+    transform: rotate(-14deg);
+  }
+}
+
+@keyframes koiTailWaggle2 {
+  0%, 100% {
+    transform: rotate(-3deg);
+  }
+  28% {
+    transform: rotate(-16deg);
+  }
+  55% {
+    transform: rotate(4deg);
+  }
+  80% {
+    transform: rotate(16deg);
+  }
+}
+
+/* Pectoral fins flutter in the water */
+@keyframes koiFinFlutterLeft {
+  0%, 100% {
+    transform: rotate(0deg) scaleX(1);
+  }
+  50% {
+    transform: rotate(12deg) scaleX(1.08);
+  }
+}
+
+@keyframes koiFinFlutterRight {
+  0%, 100% {
+    transform: rotate(0deg) scaleX(1);
+  }
+  50% {
+    transform: rotate(-12deg) scaleX(1.08);
+  }
+}
+
+/* Subtle water ripples following the koi movement */
+@keyframes koiWaterRipples {
+  0%, 100% {
+    opacity: 0.15;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.08);
+  }
+}
+
+/* Deep Submersion & Emergence for the Pyramid: Slower, more majestic water sinking and buoyant return */
+@keyframes pyramidDeepSubmergeScreen {
+  0% {
+    transform: translateY(0px) scale(1);
+    opacity: 0.42;
+  }
+  42% {
+    transform: translateY(48px) scale(0.96);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translateY(64px) scale(0.93);
+    opacity: 0.12;
+  }
+  58% {
+    transform: translateY(48px) scale(0.96);
+    opacity: 0.25;
+  }
+  100% {
+    transform: translateY(0px) scale(1);
+    opacity: 0.42;
+  }
+}
+
+/* For the blueprint showcase card: slower, deeper submersion */
+@keyframes pyramidBlueprintSubmerge {
+  0% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  42% {
+    transform: translateY(95px);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(115px);
+    opacity: 0.15;
+  }
+  58% {
+    transform: translateY(95px);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+/* Continuous rowing stroke: Correct physical mechanics
+   The boat moves FORWARD in the direction of the bow.
+   To propel forward, the oar blades in the water sweep BACKWARDS (towards stern / positive Y).
+   Port (left): clockwise positive rotation sweeps the blade from bow-side towards stern-side.
+   Starboard (right): counter-clockwise negative rotation sweeps the blade from bow-side towards stern-side.
+*/
+@keyframes oarRowingPortStroke {
+  0% {
+    /* Catch: blade starts forward towards bow */
+    transform: rotate(-22deg);
+  }
+  45% {
+    /* Drive: blade pushes water backward toward stern with power */
+    transform: rotate(26deg);
+  }
+  60% {
+    /* Finish: blade leaves water */
+    transform: rotate(22deg);
+  }
+  100% {
+    /* Recovery: blade feathers forward to catch position */
+    transform: rotate(-22deg);
+  }
+}
+
+@keyframes oarRowingStarboardStroke {
+  0% {
+    /* Catch: blade starts forward towards bow */
+    transform: rotate(22deg);
+  }
+  45% {
+    /* Drive: blade pushes water backward toward stern with power */
+    transform: rotate(-26deg);
+  }
+  60% {
+    /* Finish: blade leaves water */
+    transform: rotate(-22deg);
+  }
+  100% {
+    /* Recovery: blade feathers forward to catch position */
+    transform: rotate(22deg);
+  }
+}
+
+/* Rower torso & arms: pulls handle toward chest during power drive (oars sweep backward), reaches forward during recovery */
+@keyframes rowerBodyStroke {
+  0% {
+    /* Reaching forward towards bow for the catch */
+    transform: translateY(-4px) scaleY(0.95);
+  }
+  45% {
+    /* Pulling back with torso and arms during drive */
+    transform: translateY(5px) scaleY(1.08);
+  }
+  60% {
+    /* Finish position */
+    transform: translateY(4px) scaleY(1.04);
+  }
+  100% {
+    /* Returning forward */
+    transform: translateY(-4px) scaleY(0.95);
+  }
+}
+
+/* Water wake pulse: peaks right as the blades push water backwards */
+@keyframes waterWakePulse {
+  0% {
+    opacity: 0.18;
+    transform: scale(0.94);
+  }
+  45% {
+    opacity: 0.65;
+    transform: scale(1.12);
+  }
+  75% {
+    opacity: 0.35;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0.18;
+    transform: scale(0.94);
+  }
+}
+
+/* Mechanical gear continuous rotation */
+@keyframes mechanicalGearSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Structural truss / beam sway */
+@keyframes structuralOscillation {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-8px) rotate(1.5deg);
+  }
+  75% {
+    transform: translateY(8px) rotate(-1.5deg);
+  }
+}
+
+/* Golden spiral / compass pulsing rotation */
+@keyframes precisionCompassCycle {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.04);
+  }
+}
+
+/* Optical lens ray-trace horizontal drift */
+@keyframes opticalRayDrift {
+  0%, 100% {
+    transform: translateX(0px) translateY(0px);
+  }
+  50% {
+    transform: translateX(14px) translateY(-8px);
+  }
+}
+
+/* P&ID process flow pulse */
+@keyframes processFlowCycle {
+  0%, 100% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(-12px);
+  }
+}
+
+/* Digital clock waveform horizontal scan */
+@keyframes waveformHorizontalScan {
+  0%, 100% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(18px);
+  }
+}
+
+/* Dimensioned mechanical part gentle orbital bob */
+@keyframes mechanicalBobOrbital {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-10px) translateX(6px) rotate(1deg);
+  }
+  66% {
+    transform: translateY(6px) translateX(-6px) rotate(-1deg);
+  }
+}
+
+.animate-geom-cw {
+  animation: geometricRotateClockwise 160s linear infinite;
+  will-change: transform;
+}
+
+.animate-geom-ccw {
+  animation: geometricRotateCounter 190s linear infinite;
+  will-change: transform;
+}
+
+.animate-boat-navigation {
+  animation: boatRowingUpTurnDownLoop 26s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+  will-change: transform, opacity;
+}
+
+.animate-rower-body {
+  animation: rowerBodyStroke 2.4s ease-in-out infinite;
+  transform-origin: 80px 106px;
+  will-change: transform;
+}
+
+.animate-oar-port {
+  animation: oarRowingPortStroke 2.4s ease-in-out infinite;
+  transform-origin: 58px 101px;
+  will-change: transform;
+}
+
+.animate-oar-starboard {
+  animation: oarRowingStarboardStroke 2.4s ease-in-out infinite;
+  transform-origin: 102px 101px;
+  will-change: transform;
+}
+
+.animate-wake-pulse {
+  animation: waterWakePulse 2.4s ease-in-out infinite;
+  transform-origin: 80px 185px;
+  will-change: transform, opacity;
+}
+
+.animate-koi-red {
+  animation: koiRedChasePath 28s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+  will-change: transform, opacity;
+}
+
+.animate-koi-blue {
+  animation: koiBlueChasePath 25s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+  will-change: transform, opacity;
+}
+
+.animate-koi-tail-1 {
+  animation: koiTailWaggle1 1.8s ease-in-out infinite;
+  transform-origin: 50px 88px;
+  will-change: transform;
+}
+
+.animate-koi-tail-2 {
+  animation: koiTailWaggle2 1.5s ease-in-out infinite;
+  transform-origin: 50px 88px;
+  will-change: transform;
+}
+
+.animate-koi-fin-left {
+  animation: koiFinFlutterLeft 1.6s ease-in-out infinite;
+  transform-origin: 36px 42px;
+  will-change: transform;
+}
+
+.animate-koi-fin-right {
+  animation: koiFinFlutterRight 1.6s ease-in-out infinite;
+  transform-origin: 64px 42px;
+  will-change: transform;
+}
+
+.animate-koi-ripples {
+  animation: koiWaterRipples 3s ease-in-out infinite;
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+.animate-pyramid-screen-sink {
+  animation: pyramidDeepSubmergeScreen 22.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  will-change: transform, opacity;
+}
+
+.animate-pyramid-slow {
+  animation: pyramidBlueprintSubmerge 12.6s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.animate-gear-spin {
+  animation: mechanicalGearSpin 40s linear infinite;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.animate-truss-sway {
+  animation: structuralOscillation 14s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-compass-cycle {
+  animation: precisionCompassCycle 35s ease-in-out infinite;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.animate-ray-drift {
+  animation: opticalRayDrift 16s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-flow-cycle {
+  animation: processFlowCycle 15s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-waveform-scan {
+  animation: waveformHorizontalScan 12s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-mechanical-bob {
+  animation: mechanicalBobOrbital 20s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-beam-oscillate {
+  animation: structuralOscillation 17s ease-in-out infinite reverse;
+  will-change: transform;
+}
+
+/* =========================================================================
+   PYRAMID STONE HOUSE: 1-MINUTE (60s) CONSTRUCTION & SAND DISSOLUTION CYCLE
+   0s - 45s: Construction journey (course by course from bedrock up to apex)
+   45s - 51s: Completed monumental stone house state
+   51s - 57s: Dissolution & cascade into sand in the ground
+   57s - 60s: Sand settles back to bedrock plane and restarts
+   ========================================================================= */
+
+@keyframes stoneCourse01Foundation {
+  0% {
+    opacity: 0;
+    transform: translateY(-26px) scale(0.96);
+  }
+  3% {
+    opacity: 0.2;
+    transform: translateY(-16px) scale(0.98);
+  }
+  8% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
+  84% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
+  86% {
+    /* Subtle pre-crumble tremor */
+    transform: translateX(-1px) translateY(1px);
+  }
+  88% {
+    transform: translateX(1.5px) translateY(4px);
+    opacity: 0.85;
+  }
+  92% {
+    /* Dissolves downward into ground sand */
+    transform: translateY(18px) scaleY(0.2);
+    opacity: 0.15;
+  }
+  94%, 100% {
+    opacity: 0;
+    transform: translateY(24px) scaleY(0);
+  }
+}
+
+@keyframes stoneCourse02LowerWalls {
+  0%, 10% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  14% {
+    opacity: 0.25;
+    transform: translateY(-18px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  84% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  86% {
+    transform: translateX(1px) translateY(1px);
+  }
+  88% {
+    transform: translateX(-1.5px) translateY(8px);
+    opacity: 0.8;
+  }
+  91% {
+    transform: translateY(35px) scaleY(0.3);
+    opacity: 0.1;
+  }
+  93%, 100% {
+    opacity: 0;
+    transform: translateY(45px);
+  }
+}
+
+@keyframes stoneCourse03UpperWalls {
+  0%, 20% {
+    opacity: 0;
+    transform: translateY(-32px);
+  }
+  24% {
+    opacity: 0.3;
+    transform: translateY(-18px);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  84% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  86% {
+    transform: translateX(-1px) translateY(1px);
+  }
+  88% {
+    transform: translateX(1.5px) translateY(12px);
+    opacity: 0.75;
+  }
+  91% {
+    transform: translateY(50px) scaleY(0.25);
+    opacity: 0.1;
+  }
+  93%, 100% {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+}
+
+@keyframes stoneCourse04Cornice {
+  0%, 30% {
+    opacity: 0;
+    transform: scaleX(0.8) translateY(-25px);
+  }
+  34% {
+    opacity: 0.3;
+    transform: scaleX(0.92) translateY(-14px);
+  }
+  40% {
+    opacity: 1;
+    transform: scaleX(1) translateY(0px);
+  }
+  84% {
+    opacity: 1;
+    transform: scaleX(1) translateY(0px);
+  }
+  86% {
+    transform: translateX(1px) translateY(2px);
+  }
+  88% {
+    transform: translateY(14px) scaleX(0.9);
+    opacity: 0.7;
+  }
+  90% {
+    transform: translateY(65px) scaleY(0.2);
+    opacity: 0.1;
+  }
+  92%, 100% {
+    opacity: 0;
+    transform: translateY(75px);
+  }
+}
+
+@keyframes stoneCourse05SteppedRoof {
+  0%, 40% {
+    opacity: 0;
+    transform: translateY(-34px) scale(0.92);
+  }
+  44% {
+    opacity: 0.3;
+    transform: translateY(-18px) scale(0.96);
+  }
+  48% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
+  84% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
+  86% {
+    transform: translateX(-1px) translateY(2px);
+  }
+  88% {
+    transform: translateY(18px) scale(0.85);
+    opacity: 0.65;
+  }
+  90% {
+    transform: translateY(80px) scale(0.3);
+    opacity: 0.1;
+  }
+  92%, 100% {
+    opacity: 0;
+    transform: translateY(90px);
+  }
+}
+
+@keyframes stoneCourse06Pyramidion {
+  0%, 50% {
+    opacity: 0;
+    transform: translateY(-55px) scale(0.85);
+  }
+  54% {
+    opacity: 0.4;
+    transform: translateY(-24px) scale(0.92);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
+  74% {
+    transform: translateY(0px) scale(1);
+    filter: drop-shadow(0 0 10px rgba(217, 119, 6, 0.45));
+  }
+  84% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+    filter: none;
+  }
+  86% {
+    transform: translateY(4px) rotate(1deg);
+  }
+  88% {
+    transform: translateY(24px) rotate(-2deg);
+    opacity: 0.6;
+  }
+  90% {
+    transform: translateY(110px) scale(0.2);
+    opacity: 0.1;
+  }
+  92%, 100% {
+    opacity: 0;
+    transform: translateY(120px);
+  }
+}
+
+/* Streaming cascade of sand particles pouring down from crumbling stones */
+@keyframes sandParticlesFalling {
+  0%, 84% {
+    opacity: 0;
+    transform: translateY(-20px);
+    stroke-dashoffset: 200;
+  }
+  85% {
+    opacity: 0.85;
+    transform: translateY(0px);
+    stroke-dashoffset: 150;
+  }
+  89% {
+    opacity: 0.95;
+    transform: translateY(45px);
+    stroke-dashoffset: 50;
+  }
+  93% {
+    opacity: 0.7;
+    transform: translateY(90px);
+    stroke-dashoffset: 0;
+  }
+  96% {
+    opacity: 0.25;
+    transform: translateY(110px);
+  }
+  98%, 100% {
+    opacity: 0;
+    transform: translateY(130px);
+  }
+}
+
+/* Sand dunes / piles billowing up at the baseline and leveling back into bedrock */
+@keyframes sandDunesPilingAndSettling {
+  0%, 84% {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  86% {
+    opacity: 0.65;
+    transform: scaleY(0.4) translateY(-2px);
+  }
+  90% {
+    opacity: 0.95;
+    transform: scaleY(1.2) translateY(-6px);
+  }
+  94% {
+    opacity: 0.75;
+    transform: scaleY(0.7) translateY(-3px);
+  }
+  97% {
+    opacity: 0.35;
+    transform: scaleY(0.2) translateY(-1px);
+  }
+  99%, 100% {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+}
+
+/* Celestial solar ray / alignment plumb line appearing at completion */
+@keyframes celestialApexRay {
+  0%, 58% {
+    opacity: 0;
+  }
+  62% {
+    opacity: 0.5;
+  }
+  75%, 83% {
+    opacity: 0.85;
+  }
+  85%, 100% {
+    opacity: 0;
+  }
+}
+
+/* Blueprint drafting measurements & status label */
+@keyframes draftingDimensionsTimer {
+  0%, 4% {
+    opacity: 0;
+  }
+  8%, 84% {
+    opacity: 0.75;
+  }
+  86%, 100% {
+    opacity: 0;
+  }
+}
+
+.animate-stone-foundation {
+  animation: stoneCourse01Foundation 25s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  transform-origin: 170px 300px;
+  will-change: transform, opacity;
+}
+
+.animate-stone-lower-walls {
+  animation: stoneCourse02LowerWalls 25s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  transform-origin: 170px 240px;
+  will-change: transform, opacity;
+}
+
+.animate-stone-upper-walls {
+  animation: stoneCourse03UpperWalls 25s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  transform-origin: 170px 180px;
+  will-change: transform, opacity;
+}
+
+.animate-stone-cornice {
+  animation: stoneCourse04Cornice 25s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  transform-origin: 170px 145px;
+  will-change: transform, opacity;
+}
+
+.animate-stone-roof {
+  animation: stoneCourse05SteppedRoof 25s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  transform-origin: 170px 105px;
+  will-change: transform, opacity;
+}
+
+.animate-stone-pyramidion {
+  animation: stoneCourse06Pyramidion 25s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  transform-origin: 170px 60px;
+  will-change: transform, opacity;
+}
+
+.animate-sand-fall {
+  animation: sandParticlesFalling 25s ease-in-out infinite;
+  transform-origin: 170px 200px;
+  will-change: transform, opacity;
+}
+
+.animate-sand-dunes {
+  animation: sandDunesPilingAndSettling 25s ease-in-out infinite;
+  transform-origin: 170px 300px;
+  will-change: transform, opacity;
+}
+
+.animate-apex-ray {
+  animation: celestialApexRay 25s ease-in-out infinite;
+  transform-origin: 170px 38px;
+  will-change: opacity;
+}
+
+.animate-drafting-annotation {
+  animation: draftingDimensionsTimer 25s ease-in-out infinite;
+  will-change: opacity;
+}
+
