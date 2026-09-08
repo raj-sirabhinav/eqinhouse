@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
@@ -20,6 +20,8 @@ export const IntakePage: React.FC = () => {
   // Multi-step progress (Step 1, 2, 3, or submitted = 4)
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const webhookDispatchedRef = useRef<boolean>(false);
 
   // Form State
   const [email, setEmail] = useState<string>('');
@@ -116,6 +118,7 @@ export const IntakePage: React.FC = () => {
 
   // Parse ACV string to clean numeric value
   const parseAcvToNumber = (val: string): number => {
+    if (!val) return 25000;
     if (val.includes('15k–$25k') || val.includes('15k-25k')) return 20000;
     if (val.includes('25k–$50k') || val.includes('25k-50k')) return 37500;
     if (val.includes('50k–$100k') || val.includes('50k-100k')) return 75000;
@@ -128,29 +131,46 @@ export const IntakePage: React.FC = () => {
     return 25000;
   };
 
-  // Dispatch data to Make.com ingestion webhook
-  const dispatchWebhook = async () => {
-    try {
-      const domain = email.includes('@') ? email.split('@')[1].toLowerCase().trim() : '';
-      const namePart = domain ? domain.split('.')[0] : '';
-      const companyName = namePart
-        ? namePart
-            .split(/[-_]/)
-            .filter(Boolean)
-            .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
-            .join(' ')
-        : 'Enterprise Client';
+  // Helper to compile unified payload from Step 1 (Company Profile) and Step 2 (Stack Architecture)
+  const getFormDataPayload = () => {
+    const cleanEmail = email.trim().toLowerCase();
+    const domain = cleanEmail.includes('@') ? cleanEmail.split('@')[1].trim() : '';
+    const namePart = domain ? domain.split('.')[0] : '';
+    const companyName = namePart
+      ? namePart
+          .split(/[-_]/)
+          .filter(Boolean)
+          .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+          .join(' ')
+      : 'Enterprise Client';
 
-      const payload = {
-        work_email: email.trim().toLowerCase(),
-        company_name: companyName,
-        website_domain: domain,
-        company_arr_tier: arrRange,
-        average_contract_value_acv: parseAcvToNumber(acvRange),
-        primary_crm: crm,
-        active_tools: enrichmentTools.filter((t) => t !== 'None'),
-        target_package: getPackageDisplayTitle(selectedPackage),
-      };
+    const cleanActiveTools: string[] = Array.isArray(enrichmentTools)
+      ? enrichmentTools.filter((t) => t && t !== 'None')
+      : [];
+
+    return {
+      work_email: cleanEmail,
+      company_name: companyName,
+      website_domain: domain,
+      company_arr_tier: arrRange || '$3M–$10M',
+      average_contract_value_acv: Number(parseAcvToNumber(acvRange)),
+      primary_crm: crm || 'Salesforce',
+      active_tools: cleanActiveTools,
+      target_package: getPackageDisplayTitle(selectedPackage) || '7-Day GTM Architecture Diagnostic',
+    };
+  };
+
+  // Dispatch data to Make.com ingestion webhook (strictly fired once)
+  const dispatchWebhook = async (): Promise<boolean> => {
+    if (webhookDispatchedRef.current || isSubmitting) {
+      return false;
+    }
+
+    setIsSubmitting(true);
+    webhookDispatchedRef.current = true;
+
+    try {
+      const payload = getFormDataPayload();
 
       await fetch('https://hook.eu1.make.com/1i1kj99381i8ot88gqlj1vwn0vt0itku', {
         method: 'POST',
@@ -159,21 +179,42 @@ export const IntakePage: React.FC = () => {
         },
         body: JSON.stringify(payload),
       });
+      return true;
     } catch (err) {
       console.warn('Make.com webhook ingestion notice (non-blocking):', err);
+      return false;
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  // Submit Handler
+  // Step 2 -> Step 3 transition handler
+  const handleContinueToCalendarLock = async () => {
+    if (isSubmitting) return;
+    await dispatchWebhook();
+    setCurrentStep(3);
+  };
+
+  // Form Submit Handler
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateWorkEmail(email)) {
-      setCurrentStep(1);
+
+    if (currentStep === 1) {
+      if (validateWorkEmail(email)) {
+        setCurrentStep(2);
+      }
       return;
     }
 
-    // Fire webhook dispatch asynchronously on final submission
-    dispatchWebhook();
+    if (currentStep === 2) {
+      void handleContinueToCalendarLock();
+      return;
+    }
+
+    // Step 3 final submit: only dispatch if not already sent during Step 2
+    if (!webhookDispatchedRef.current) {
+      void dispatchWebhook();
+    }
 
     setIsSubmitted(true);
 
@@ -487,14 +528,21 @@ export const IntakePage: React.FC = () => {
                       </button>
                       <button
                         type="button"
-                        onClick={() => {
-                          dispatchWebhook();
-                          setCurrentStep(3);
-                        }}
-                        className="inline-flex items-center px-5 py-2.5 rounded-lg text-xs font-medium text-white bg-[#6366F1] hover:bg-[#4f46e5] transition-colors shadow-xs"
+                        disabled={isSubmitting}
+                        onClick={handleContinueToCalendarLock}
+                        className="inline-flex items-center px-5 py-2.5 rounded-lg text-xs font-medium text-white bg-[#6366F1] hover:bg-[#4f46e5] transition-colors shadow-xs disabled:opacity-60 disabled:cursor-not-allowed"
                       >
-                        <span>Continue to Calendar Lock</span>
-                        <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                        {isSubmitting ? (
+                          <>
+                            <span className="inline-block h-3.5 w-3.5 border-2 border-white border-t-transparent rounded-full animate-spin mr-1.5" />
+                            <span>Securing Priority Routing...</span>
+                          </>
+                        ) : (
+                          <>
+                            <span>Continue to Calendar Lock</span>
+                            <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                          </>
+                        )}
                       </button>
                     </div>
                   </motion.div>
@@ -698,7 +746,8 @@ export const IntakePage: React.FC = () => {
 
                       <button
                         type="submit"
-                        className="inline-flex items-center justify-center px-6 py-3.5 rounded-lg text-xs sm:text-sm font-semibold text-white bg-[#6366F1] hover:bg-[#4F46E5] shadow-sm hover:shadow-md transition-all group active:scale-98 cursor-pointer font-sans"
+                        disabled={isSubmitting}
+                        className="inline-flex items-center justify-center px-6 py-3.5 rounded-lg text-xs sm:text-sm font-semibold text-white bg-[#6366F1] hover:bg-[#4F46E5] shadow-sm hover:shadow-md transition-all group active:scale-98 cursor-pointer font-sans disabled:opacity-60 disabled:cursor-not-allowed"
                       >
                         <Lock className="mr-2 h-4 w-4 text-white/90" />
                         <span>{getCtaButtonText(selectedPackage)}</span>
@@ -757,6 +806,7 @@ export const IntakePage: React.FC = () => {
                   <button
                     onClick={() => {
                       setIsSubmitted(false);
+                      webhookDispatchedRef.current = false;
                       setCurrentStep(1);
                     }}
                     className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] underline"
