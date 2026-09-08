@@ -133,7 +133,7 @@ export const IntakePage: React.FC = () => {
 
   // Helper to compile unified payload from Step 1 (Company Profile) and Step 2 (Stack Architecture)
   const getFormDataPayload = () => {
-    const cleanEmail = email.trim().toLowerCase();
+    const cleanEmail = (email && typeof email === 'string') ? email.trim().toLowerCase() : '';
     const domain = cleanEmail.includes('@') ? cleanEmail.split('@')[1].trim() : '';
     const namePart = domain ? domain.split('.')[0] : '';
     const companyName = namePart
@@ -145,18 +145,23 @@ export const IntakePage: React.FC = () => {
       : 'Enterprise Client';
 
     const cleanActiveTools: string[] = Array.isArray(enrichmentTools)
-      ? enrichmentTools.filter((t) => t && t !== 'None')
+      ? enrichmentTools.filter((t) => typeof t === 'string' && t.trim() !== '' && t !== 'None')
       : [];
+
+    const parsedAcv = Number(parseAcvToNumber(acvRange));
+    const targetPkg = (selectedPackage && getPackageDisplayTitle(selectedPackage)) 
+      ? getPackageDisplayTitle(selectedPackage) 
+      : (selectedPackage || '7-Day GTM Architecture Diagnostic');
 
     return {
       work_email: cleanEmail,
       company_name: companyName,
       website_domain: domain,
       company_arr_tier: arrRange || '$3M–$10M',
-      average_contract_value_acv: Number(parseAcvToNumber(acvRange)),
-      primary_crm: crm || 'Salesforce',
+      average_contract_value_acv: isNaN(parsedAcv) ? 25000 : parsedAcv,
+      primary_crm: (crm && crm.trim()) ? crm.trim() : 'Salesforce',
       active_tools: cleanActiveTools,
-      target_package: getPackageDisplayTitle(selectedPackage) || '7-Day GTM Architecture Diagnostic',
+      target_package: targetPkg,
     };
   };
 
@@ -171,6 +176,8 @@ export const IntakePage: React.FC = () => {
 
     try {
       const payload = getFormDataPayload();
+
+      console.log("Intake Payload:", payload);
 
       await fetch('https://hook.eu1.make.com/1i1kj99381i8ot88gqlj1vwn0vt0itku', {
         method: 'POST',
@@ -321,6 +328,14 @@ export const IntakePage: React.FC = () => {
                           required
                           value={email}
                           onChange={(e) => validateWorkEmail(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              if (validateWorkEmail(email)) {
+                                setCurrentStep(2);
+                              }
+                            }
+                          }}
                           placeholder="cro@company.com"
                           className={`w-full px-3.5 py-2.5 rounded-lg border text-sm text-[var(--text-primary)] placeholder:text-[#a89f91] focus:outline-none transition-colors bg-white ${
                             emailError 
