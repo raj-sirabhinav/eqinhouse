@@ -114,6 +114,56 @@ export const IntakePage: React.FC = () => {
     }
   };
 
+  // Parse ACV string to clean numeric value
+  const parseAcvToNumber = (val: string): number => {
+    if (val.includes('15k–$25k') || val.includes('15k-25k')) return 20000;
+    if (val.includes('25k–$50k') || val.includes('25k-50k')) return 37500;
+    if (val.includes('50k–$100k') || val.includes('50k-100k')) return 75000;
+    if (val.includes('15k')) return 15000;
+    const match = val.match(/\d+/g);
+    if (match && match.length > 0) {
+      const num = parseInt(match[0], 10);
+      return val.toLowerCase().includes('k') ? num * 1000 : num;
+    }
+    return 25000;
+  };
+
+  // Dispatch data to Make.com ingestion webhook
+  const dispatchWebhook = async () => {
+    try {
+      const domain = email.includes('@') ? email.split('@')[1].toLowerCase().trim() : '';
+      const namePart = domain ? domain.split('.')[0] : '';
+      const companyName = namePart
+        ? namePart
+            .split(/[-_]/)
+            .filter(Boolean)
+            .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+            .join(' ')
+        : 'Enterprise Client';
+
+      const payload = {
+        work_email: email.trim().toLowerCase(),
+        company_name: companyName,
+        website_domain: domain,
+        company_arr_tier: arrRange,
+        average_contract_value_acv: parseAcvToNumber(acvRange),
+        primary_crm: crm,
+        active_tools: enrichmentTools.filter((t) => t !== 'None'),
+        target_package: getPackageDisplayTitle(selectedPackage),
+      };
+
+      await fetch('https://hook.eu1.make.com/1i1kj99381i8ot88gqlj1vwn0vt0itku', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+    } catch (err) {
+      console.warn('Make.com webhook ingestion notice (non-blocking):', err);
+    }
+  };
+
   // Submit Handler
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -121,6 +171,9 @@ export const IntakePage: React.FC = () => {
       setCurrentStep(1);
       return;
     }
+
+    // Fire webhook dispatch asynchronously on final submission
+    dispatchWebhook();
 
     setIsSubmitted(true);
 
@@ -434,7 +487,10 @@ export const IntakePage: React.FC = () => {
                       </button>
                       <button
                         type="button"
-                        onClick={() => setCurrentStep(3)}
+                        onClick={() => {
+                          dispatchWebhook();
+                          setCurrentStep(3);
+                        }}
                         className="inline-flex items-center px-5 py-2.5 rounded-lg text-xs font-medium text-white bg-[#6366F1] hover:bg-[#4f46e5] transition-colors shadow-xs"
                       >
                         <span>Continue to Calendar Lock</span>
