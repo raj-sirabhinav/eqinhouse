@@ -17,9 +17,9 @@ export const BackgroundEffects: React.FC = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
-      {/* 1. Base Canvas: Warm Oatmeal Linen (#FAF8F5) */}
-      <div className="absolute inset-0 bg-[#FAF8F5]" />
+    <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden select-none">
+      {/* 1. Base Canvas: Warm Oatmeal Linen is on body/root container; kept transparent here for ambient particle visibility */}
+      <div className="absolute inset-0 pointer-events-none" />
 
       {/* 2. Blueprint Grid: Semi-transparent subtle blueprint grid pattern (#E6DFD5 at 0.1 opacity) */}
       <div 

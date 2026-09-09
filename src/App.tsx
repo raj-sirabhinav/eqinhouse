@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { BackgroundEffects } from './components/BackgroundEffects';
+import { AmbientBackground } from './components/AmbientBackground';
 import { HomePage } from './pages/HomePage';
 import { ServicesPage } from './pages/ServicesPage';
 import { StackPage } from './pages/StackPage';
@@ -50,6 +51,9 @@ export function App() {
     <BrowserRouter>
       <RouteWatcher />
       <div className="relative min-h-screen flex flex-col bg-[var(--bg-canvas)] text-[var(--text-primary)] selection:bg-[var(--accent-navy)] selection:text-[#f9f8f6]">
+        {/* Ambient interactive particle background */}
+        <AmbientBackground />
+
         {/* Subtle architectural background texture */}
         <BackgroundEffects />
 

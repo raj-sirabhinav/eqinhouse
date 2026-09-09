@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
+import Cal, { getCalApi } from '@calcom/embed-react';
 import { 
   ShieldCheck, 
   ArrowRight, 
@@ -30,9 +31,7 @@ export const IntakePage: React.FC = () => {
   const [acvRange, setAcvRange] = useState<string>('$25k–$50k');
   const [crm, setCrm] = useState<string>('Salesforce');
   const [enrichmentTools, setEnrichmentTools] = useState<string[]>(['Clay', 'Apollo']);
-  const [secretShopperConsent, setSecretShopperConsent] = useState<boolean>(true);
   type PackageTier = 'diagnostic' | 'core-engine' | 'fractional';
-
   const [selectedPackage, setSelectedPackage] = useState<PackageTier>(() => {
     if (tierParam === 'core-engine') return 'core-engine';
     if (tierParam === 'fractional') return 'fractional';
@@ -51,17 +50,6 @@ export const IntakePage: React.FC = () => {
     }
   };
 
-  const getCtaButtonText = (pkg: PackageTier) => {
-    switch (pkg) {
-      case 'diagnostic':
-        return 'Lock Diagnostic Slot →';
-      case 'core-engine':
-        return 'Lock Architecture Slot →';
-      case 'fractional':
-        return 'Lock Architecture Slot →';
-    }
-  };
-
   const getTimelineText = (pkg: PackageTier) => {
     switch (pkg) {
       case 'diagnostic':
@@ -72,16 +60,56 @@ export const IntakePage: React.FC = () => {
         return 'Quarterly Commitment • Async SLA';
     }
   };
-  const [selectedSlot, setSelectedSlot] = useState<number>(0);
 
-  const timeSlots = [
-    { day: 'TOMORROW / LIVE', time: '10:00 AM ET' },
-    { day: 'TOMORROW / LIVE', time: '2:30 PM ET' },
-    { day: 'TOMORROW / LIVE', time: '4:00 PM ET' },
-    { day: 'THURSDAY / LIVE', time: '11:00 AM ET' },
-    { day: 'THURSDAY / LIVE', time: '1:30 PM ET' },
-    { day: 'FRIDAY / LIVE', time: '3:00 PM ET' },
-  ];
+  // Dynamic Cal link mapping based on user's selected package
+  const getCalLink = (pkg: string): string => {
+    const title = getPackageDisplayTitle(pkg as PackageTier) || pkg || '';
+    if (title.includes('7-Day') || title.includes('Tier 1') || pkg === 'diagnostic') {
+      return 'eqinhouse/diagnostic';
+    }
+    if (title.includes('Core GTM') || title.includes('Tier 2') || pkg === 'core-engine') {
+      return 'eqinhouse/sprint';
+    }
+    if (title.includes('Fractional') || title.includes('Tier 3') || pkg === 'fractional') {
+      return 'eqinhouse/fractional';
+    }
+    return 'eqinhouse/diagnostic';
+  };
+
+  const calLink = getCalLink(selectedPackage);
+
+  // Initialize Cal.com Embed API
+  useEffect(() => {
+    (async function () {
+      try {
+        const cal = await getCalApi();
+        cal('ui', {
+          theme: 'dark',
+          styles: { branding: { brandColor: '#6366F1' } },
+          hideEventTypeDetails: false,
+          layout: 'month_view',
+        });
+        cal('on', {
+          action: 'bookingSuccessful',
+          callback: () => {
+            setIsSubmitted(true);
+            try {
+              confetti({
+                particleCount: 60,
+                spread: 60,
+                origin: { y: 0.6 },
+                colors: ['#1e293b', '#854d0e', '#059669', '#e6ded5'],
+              });
+            } catch {
+              // safe fallback
+            }
+          },
+        });
+      } catch (err) {
+        console.warn('Cal.com embed initialization notice:', err);
+      }
+    })();
+  }, []);
 
   // Email validation
   const validateWorkEmail = (val: string) => {
@@ -131,19 +159,20 @@ export const IntakePage: React.FC = () => {
     return 25000;
   };
 
+  // Derived contact info for Webhook and Cal.com embed
+  const cleanEmail = (email && typeof email === 'string') ? email.trim().toLowerCase() : '';
+  const domain = cleanEmail.includes('@') ? cleanEmail.split('@')[1].trim() : '';
+  const namePart = domain ? domain.split('.')[0] : '';
+  const companyName = namePart
+    ? namePart
+        .split(/[-_]/)
+        .filter(Boolean)
+        .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+        .join(' ')
+    : '';
+
   // Helper to compile unified payload from Step 1 (Company Profile) and Step 2 (Stack Architecture)
   const getFormDataPayload = () => {
-    const cleanEmail = (email && typeof email === 'string') ? email.trim().toLowerCase() : '';
-    const domain = cleanEmail.includes('@') ? cleanEmail.split('@')[1].trim() : '';
-    const namePart = domain ? domain.split('.')[0] : '';
-    const companyName = namePart
-      ? namePart
-          .split(/[-_]/)
-          .filter(Boolean)
-          .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
-          .join(' ')
-      : 'Enterprise Client';
-
     const cleanActiveTools: string[] = Array.isArray(enrichmentTools)
       ? enrichmentTools.filter((t) => typeof t === 'string' && t.trim() !== '' && t !== 'None')
       : [];
@@ -155,7 +184,7 @@ export const IntakePage: React.FC = () => {
 
     return {
       work_email: cleanEmail,
-      company_name: companyName,
+      company_name: companyName || 'Enterprise Client',
       website_domain: domain,
       company_arr_tier: arrRange || '$3M–$10M',
       average_contract_value_acv: isNaN(parsedAcv) ? 25000 : parsedAcv,
@@ -642,10 +671,10 @@ export const IntakePage: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Interactive Embedded Scheduling Engine */}
-                    <div className="rounded-xl border border-[#E2E8F0] bg-white overflow-hidden shadow-xs p-5 sm:p-6 font-sans">
+                    {/* Interactive Embedded Scheduling Engine with Live Cal.com */}
+                    <div className="rounded-xl border border-[#E2E8F0] bg-white overflow-hidden shadow-xs p-5 sm:p-6 font-sans space-y-4">
                       {/* Practice Lead Card Header */}
-                      <div className="flex items-center justify-between pb-3.5 border-b border-[#E2E8F0] mb-4">
+                      <div className="flex items-center justify-between pb-3.5 border-b border-[#E2E8F0]">
                         <div className="flex items-center gap-3">
                           <div className="relative">
                             <div className="h-9 w-9 rounded-xl bg-[#0F172A] border border-[#1E293B] text-white flex items-center justify-center font-bold text-xs font-mono shadow-xs">
@@ -668,106 +697,41 @@ export const IntakePage: React.FC = () => {
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#059669] opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-[#059669]"></span>
                           </span>
-                          <span>LIVE OPENINGS</span>
+                          <span>LIVE CALENDAR</span>
                         </div>
                       </div>
 
-                      {/* Cal.com / Scheduler Slot Picker Simulation */}
-                      <div className="space-y-3">
-                        <div className="text-[11px] font-semibold text-[#0F172A] uppercase tracking-wider font-mono">
-                          Select Diagnostic Time Slot (Eastern Time):
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-                          {timeSlots.map((slot, i) => {
-                            const isSelected = selectedSlot === i;
-                            return (
-                              <button
-                                type="button"
-                                key={i}
-                                onClick={() => setSelectedSlot(i)}
-                                className={`p-[14px_18px] rounded-lg border text-left transition-all duration-150 flex flex-col justify-between cursor-pointer ${
-                                  isSelected
-                                    ? 'bg-[#0F172A] border-[#0F172A] text-white shadow-sm scale-[1.01]'
-                                    : 'bg-white border-[#E2E8F0] hover:border-[#6366F1] hover:bg-[#6366F1]/[0.04] hover:scale-[1.02] text-[#0F172A]'
-                                }`}
-                              >
-                                <div className="flex items-center justify-between w-full mb-1">
-                                  <span className={`text-[10px] font-mono font-medium tracking-wider uppercase ${
-                                    isSelected ? 'text-slate-300' : 'text-[#64748B]'
-                                  }`}>
-                                    {slot.day}
-                                  </span>
-                                  {isSelected && (
-                                    <span className="flex items-center justify-center h-4 w-4 rounded-full bg-[#6366F1] text-white shadow-2xs">
-                                      <Check className="h-2.5 w-2.5 stroke-[2.5]" />
-                                    </span>
-                                  )}
-                                </div>
-                                <div className={`text-xs sm:text-sm font-bold font-mono tracking-tight ${
-                                  isSelected ? 'text-white' : 'text-[#0F172A]'
-                                }`}>
-                                  {slot.time}
-                                </div>
-                              </button>
-                            );
-                          })}
-                        </div>
-                        <div className="pt-2 text-[11px] font-mono text-[#64748B] text-center flex items-center justify-center gap-1.5">
-                          <Lock className="h-3.5 w-3.5 text-[#64748B] shrink-0" />
-                          <span>Direct integration with Cal.com &bull; Calendar invite + Zoom link dispatched instantly</span>
-                        </div>
+                      {/* Dynamic Cal.com Inline Embed */}
+                      <div className="w-full min-h-[650px] rounded-xl bg-[#0F172A] border border-[#1E293B] shadow-xl overflow-hidden p-1 sm:p-2">
+                        <Cal
+                          key={calLink}
+                          calLink={calLink}
+                          style={{ width: '100%', height: '100%', minHeight: '650px', overflow: 'auto' }}
+                          config={{
+                            name: companyName,
+                            email: cleanEmail,
+                            theme: 'dark',
+                            layout: 'month_view',
+                          }}
+                        />
                       </div>
                     </div>
 
-                    {/* Secret Shopper Checkbox */}
-                    <div className="p-4 sm:p-5 rounded-xl bg-[#F8FAFC] border border-dashed border-[#CBD5E1] transition-colors">
-                      <label className="flex items-start gap-3.5 cursor-pointer select-none group">
-                        <div className="relative flex items-center justify-center mt-0.5 shrink-0">
-                          <input
-                            type="checkbox"
-                            checked={secretShopperConsent}
-                            onChange={(e) => setSecretShopperConsent(e.target.checked)}
-                            className="sr-only"
-                          />
-                          <div className={`h-5 w-5 rounded-md border transition-all flex items-center justify-center ${
-                            secretShopperConsent
-                              ? 'bg-[#6366F1] border-[#6366F1] text-white shadow-xs'
-                              : 'bg-white border-[#CBD5E1] group-hover:border-[#6366F1]'
-                          }`}>
-                            {secretShopperConsent && <Check className="h-3.5 w-3.5 stroke-[2.5]" />}
-                          </div>
-                        </div>
-                        <div className="text-xs">
-                          <span className="text-[#0F172A] font-bold block mb-1">
-                            Authorize Secret-Shopper Speed-to-Lead Test
-                          </span>
-                          <span className="text-[#475569] leading-relaxed block">
-                            Authorize eqinhouse to run a secret-shopper test on our public demo form to measure exact latency from form submission to SDR outreach.
-                          </span>
-                        </div>
-                      </label>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="pt-3 flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3">
+                    {/* Navigation Actions */}
+                    <div className="pt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                       <button
                         type="button"
                         onClick={() => setCurrentStep(2)}
-                        className="inline-flex items-center justify-center px-4 py-3 rounded-lg text-xs sm:text-sm font-medium text-[#475569] hover:text-[#0F172A] border border-[#E2E8F0] bg-white hover:bg-[#FAF8F5] transition-all shadow-2xs active:scale-98 cursor-pointer font-mono"
+                        className="inline-flex items-center justify-center px-4 py-2.5 rounded-lg text-xs sm:text-sm font-medium text-[#475569] hover:text-[#0F172A] border border-[#E2E8F0] bg-white hover:bg-[#FAF8F5] transition-all shadow-2xs active:scale-98 cursor-pointer font-mono"
                       >
                         <ArrowLeft className="mr-2 h-4 w-4" />
-                        <span>Back</span>
+                        <span>Back to Stack Setup</span>
                       </button>
 
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="inline-flex items-center justify-center px-6 py-3.5 rounded-lg text-xs sm:text-sm font-semibold text-white bg-[#6366F1] hover:bg-[#4F46E5] shadow-sm hover:shadow-md transition-all group active:scale-98 cursor-pointer font-sans disabled:opacity-60 disabled:cursor-not-allowed"
-                      >
-                        <Lock className="mr-2 h-4 w-4 text-white/90" />
-                        <span>{getCtaButtonText(selectedPackage)}</span>
-                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                      </button>
+                      <div className="text-[11px] font-mono text-[#64748B] flex items-center gap-1.5">
+                        <Lock className="h-3.5 w-3.5 text-[#64748B] shrink-0" />
+                        <span>Direct integration with Cal.com &bull; Calendar invite + Zoom link dispatched instantly</span>
+                      </div>
                     </div>
                   </motion.div>
                 )}
