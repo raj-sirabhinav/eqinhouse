@@ -29,7 +29,7 @@ const PALETTE = [
 
 const PARTICLE_COUNT = 48;
 const CURSOR_REPEL_RADIUS = 130;
-const IDLE_TIMEOUT_MS = 30000; // 30-second inactivity window
+const IDLE_TIMEOUT_MS = 15000; // 15-second inactivity window
 
 export const AmbientBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
