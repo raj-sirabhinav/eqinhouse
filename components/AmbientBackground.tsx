@@ -2,31 +2,29 @@
 
 import React, { useEffect, useRef } from 'react';
 
-// Color Spectrum: Full 7-color ROYGBIV palette across lattice cells
-const PALETTE = [
-  { stroke: 'rgb(239, 68, 68)', dot: '#f87171' },   // Red
-  { stroke: 'rgb(249, 115, 22)', dot: '#fb923c' },  // Orange
-  { stroke: 'rgb(234, 179, 8)', dot: '#facc15' },   // Yellow
-  { stroke: 'rgb(16, 185, 129)', dot: '#34d399' },  // Green
-  { stroke: 'rgb(37, 99, 235)', dot: '#60a5fa' },   // Blue
-  { stroke: 'rgb(99, 102, 241)', dot: '#818cf8' },  // Indigo
-  { stroke: 'rgb(168, 85, 247)', dot: '#c084fc' },  // Violet
+// Enterprise 5-State Color Palette
+const ENTERPRISE_PALETTE = [
+  { name: 'Ingest', stroke: '37, 99, 235', dot: '#38bdf8' },           // Ingest (Blue)
+  { name: 'Audit', stroke: '100, 116, 139', dot: '#cbd5e1' },         // Audit / Governance (Slate)
+  { name: 'Enrichment', stroke: '245, 158, 11', dot: '#fbbf24' },     // Enrichment (Amber)
+  { name: 'CRM Lock', stroke: '16, 185, 129', dot: '#34d399' },       // CRM Lock (Emerald)
+  { name: 'SLA Dispatch', stroke: '6, 182, 212', dot: '#67e8f9' },     // SLA Dispatch (Cyan)
 ];
 
-interface LatticeCell {
+interface HexCell {
   cx: number;
   cy: number;
-  tier: number;
-  color: { stroke: string; dot: string };
-  // Pre-calculated isometric coordinates
-  // Top rhombus: cx, cy - SIZE (top); cx + dx/2, cy - SIZE/2 (right); cx, cy (center); cx - dx/2, cy - SIZE/2 (left)
-  // Cube bottom: cx, cy + SIZE (bottom); cx - dx/2, cy + SIZE/2 (bottom-left); cx + dx/2, cy + SIZE/2 (bottom-right)
+  isActive: boolean;
+  phaseOffset: number;
+  color: { name: string; stroke: string; dot: string };
+  // Precomputed 6 vertex coordinates
+  vertices: [number, number][];
 }
 
-const SIZE = 45;
-const DX = SIZE * Math.sqrt(3); // ≈ 77.94
-const DY = SIZE * 1.5;          // 67.5
-const IDLE_TIMEOUT_MS = 15000;  // 15 seconds
+const R = 44; // Hexagon radius
+const DX = R * 1.5; // Horizontal step = 66
+const DY = R * Math.sqrt(3); // Vertical step ≈ 76.21
+const IDLE_TIMEOUT_MS = 15000; // Exactly 15 seconds
 
 export const AmbientBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -45,47 +43,60 @@ export const AmbientBackground: React.FC = () => {
     let isIdle = false;
     let currentOpacity = 0.0;
     let targetOpacity = 0.0;
-    let wave = 0;
-    let cells: LatticeCell[] = [];
+    let step = 0;
+    let hexes: HexCell[] = [];
     let idleTimer: ReturnType<typeof setTimeout> | null = null;
 
-    // Generate grid coordinates for isometric lattice
+    // Precalculate hexagon vertices relative to center
+    // Flat-topped / pointed-topped based on horizontal step DX = R * 1.5, vertical step DY = R * sqrt(3)
+    // Points at angle: k * PI / 3 (0, 60, 120, 180, 240, 300 deg)
+    const computeVertices = (cx: number, cy: number): [number, number][] => {
+      const pts: [number, number][] = [];
+      for (let i = 0; i < 6; i++) {
+        const angle = (i * Math.PI) / 3;
+        pts.push([cx + R * Math.cos(angle), cy + R * Math.sin(angle)]);
+      }
+      return pts;
+    };
+
+    // Generate honeycomb mesh grid
     const generateGrid = () => {
-      cells = [];
+      hexes = [];
       const cols = Math.ceil(width / DX) + 3;
       const rows = Math.ceil(height / DY) + 3;
 
-      let cellIndex = 0;
-      for (let r = -1; r < rows; r++) {
-        for (let c = -1; c < cols; c++) {
-          const offsetX = (r % 2 === 0) ? 0 : DX / 2;
-          const cx = c * DX + offsetX;
-          const cy = r * DY;
+      for (let c = -1; c < cols; c++) {
+        // Alternate columns or rows staggered by dy / 2
+        const offsetY = (Math.abs(c) % 2 === 1) ? DY / 2 : 0;
+        const cx = c * DX;
 
-          const tier = (c + r * 2) % PALETTE.length;
-          const colorIndex = ((tier % PALETTE.length) + PALETTE.length) % PALETTE.length;
+        for (let r = -1; r < rows; r++) {
+          const cy = r * DY + offsetY;
+          const isActive = Math.random() > 0.82; // ~18% active highlight cells
+          const paletteIndex = Math.floor(Math.random() * ENTERPRISE_PALETTE.length);
 
-          cells.push({
+          hexes.push({
             cx,
             cy,
-            tier: cellIndex % 7,
-            color: PALETTE[colorIndex],
+            isActive,
+            phaseOffset: Math.random() * Math.PI * 2,
+            color: ENTERPRISE_PALETTE[paletteIndex],
+            vertices: computeVertices(cx, cy),
           });
-          cellIndex++;
         }
       }
     };
 
     generateGrid();
 
-    // Start render loop only when animating
+    // Start render loop only when needed
     const startRenderLoop = () => {
       if (animFrameId === null) {
         animFrameId = requestAnimationFrame(animate);
       }
     };
 
-    // User activity handler: immediately triggers fade out and resets idle countdown
+    // User activity handler: immediately resets timer, transitions opacity to 0
     const onUserInteraction = () => {
       isIdle = false;
       targetOpacity = 0.0;
@@ -97,7 +108,7 @@ export const AmbientBackground: React.FC = () => {
         startRenderLoop();
       }, IDLE_TIMEOUT_MS);
 
-      // Keep loop running while currentOpacity transitions down to 0
+      // Keep loop running to smoothly transition currentOpacity to 0
       startRenderLoop();
     };
 
@@ -113,21 +124,19 @@ export const AmbientBackground: React.FC = () => {
     };
 
     window.addEventListener('mousemove', onUserInteraction, { passive: true });
-    window.addEventListener('mousedown', onUserInteraction, { passive: true });
     window.addEventListener('keydown', onUserInteraction, { passive: true });
-    window.addEventListener('touchstart', onUserInteraction, { passive: true });
-    window.addEventListener('touchmove', onUserInteraction, { passive: true });
     window.addEventListener('scroll', onUserInteraction, { passive: true });
+    window.addEventListener('touchstart', onUserInteraction, { passive: true });
     window.addEventListener('resize', handleResize);
 
-    // Initial idle timer setup
+    // Initial 15-second idle trigger countdown
     idleTimer = setTimeout(() => {
       isIdle = true;
       targetOpacity = 1.0;
       startRenderLoop();
     }, IDLE_TIMEOUT_MS);
 
-    // Animation loop
+    // Canvas animation loop
     const animate = () => {
       // Smooth lerp transition for canvas opacity
       currentOpacity += (targetOpacity - currentOpacity) * 0.08;
@@ -144,82 +153,67 @@ export const AmbientBackground: React.FC = () => {
         return;
       }
 
-      wave += 0.012; // Smooth, slow ambient pulse progression
+      step += 0.012; // Controlled, slow step increment
 
-      const halfDx = DX / 2;
-      const halfSize = SIZE / 2;
-
-      // 1. Structural Wireframe: faint base isometric cube lines with rgba(15, 23, 42, 0.035)
+      // 1. Base Mesh: faint static structural lines with rgba(15, 23, 42, 0.03) and lineWidth = 1
       ctx.beginPath();
-      ctx.strokeStyle = `rgba(15, 23, 42, ${0.035 * currentOpacity})`;
+      ctx.strokeStyle = `rgba(15, 23, 42, ${0.03 * currentOpacity})`;
       ctx.lineWidth = 1;
 
-      for (let i = 0; i < cells.length; i++) {
-        const { cx, cy } = cells[i];
-
-        // Top rhombus wireframe
-        ctx.moveTo(cx, cy - SIZE);
-        ctx.lineTo(cx + halfDx, cy - halfSize);
-        ctx.lineTo(cx, cy);
-        ctx.lineTo(cx - halfDx, cy - halfSize);
+      for (let i = 0; i < hexes.length; i++) {
+        const { vertices } = hexes[i];
+        ctx.moveTo(vertices[0][0], vertices[0][1]);
+        for (let v = 1; v < 6; v++) {
+          ctx.lineTo(vertices[v][0], vertices[v][1]);
+        }
         ctx.closePath();
-
-        // Downward vertical edges of the isometric cube
-        ctx.moveTo(cx, cy);
-        ctx.lineTo(cx, cy + SIZE);
-
-        ctx.moveTo(cx - halfDx, cy - halfSize);
-        ctx.lineTo(cx - halfDx, cy + halfSize);
-
-        ctx.moveTo(cx + halfDx, cy - halfSize);
-        ctx.lineTo(cx + halfDx, cy + halfSize);
-
-        // Bottom edges
-        ctx.moveTo(cx - halfDx, cy + halfSize);
-        ctx.lineTo(cx, cy + SIZE);
-        ctx.lineTo(cx + halfDx, cy + halfSize);
       }
       ctx.stroke();
 
-      // 2. Wave Dynamics & Highlight Accent
-      for (let i = 0; i < cells.length; i++) {
-        const cell = cells[i];
-        const phase = Math.sin(wave + cell.tier * 0.9 + (cell.cx + cell.cy) * 0.0018);
+      // 2. Active Highlighting & Vertex Indicators
+      for (let i = 0; i < hexes.length; i++) {
+        const hex = hexes[i];
+        if (!hex.isActive) continue;
 
-        // Only render illuminated isometric plane when phase > 0.3
-        if (phase > 0.3) {
-          const intensity = (phase - 0.3) / 0.7; // normalized 0..1
-          const alpha = intensity * 0.8 * currentOpacity;
+        // Pulse dynamic calculation: 0.12 + ((Math.sin(step + hex.phaseOffset) + 1) / 2) * 0.45
+        const sinVal = (Math.sin(step + hex.phaseOffset) + 1) / 2; // normalized 0..1
+        const alpha = (0.12 + sinVal * 0.45) * currentOpacity;
 
-          const { cx, cy } = cell;
+        const { vertices, cx, cy, color } = hex;
 
-          // Subtle top rhombus face illumination
+        // Subtle glowing fill on active honeycomb cell
+        ctx.beginPath();
+        ctx.moveTo(vertices[0][0], vertices[0][1]);
+        for (let v = 1; v < 6; v++) {
+          ctx.lineTo(vertices[v][0], vertices[v][1]);
+        }
+        ctx.closePath();
+        ctx.fillStyle = `rgba(${color.stroke}, ${alpha * 0.12})`;
+        ctx.fill();
+
+        // Highlight stroke with lineWidth = 1.6
+        ctx.strokeStyle = `rgba(${color.stroke}, ${alpha})`;
+        ctx.lineWidth = 1.6;
+        ctx.stroke();
+
+        // Vertex Indicator: When pulse value (sinVal) exceeds 0.55, render anchor node point at center vertex (radius 2.5)
+        if (sinVal > 0.55) {
+          const nodeAlpha = Math.min(1.0, ((sinVal - 0.55) / 0.45) * currentOpacity);
+
           ctx.beginPath();
-          ctx.moveTo(cx, cy - SIZE);
-          ctx.lineTo(cx + halfDx, cy - halfSize);
-          ctx.lineTo(cx, cy);
-          ctx.lineTo(cx - halfDx, cy - halfSize);
-          ctx.closePath();
-          ctx.fillStyle = cell.color.stroke.replace('rgb', 'rgba').replace(')', `, ${alpha * 0.08})`);
+          ctx.arc(cx, cy, 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = color.dot;
+          ctx.globalAlpha = nodeAlpha;
           ctx.fill();
 
-          // Active top rhombus edge highlight
+          // Delicate outer micro-ring around the active node
           ctx.beginPath();
-          ctx.moveTo(cx, cy - SIZE);
-          ctx.lineTo(cx + halfDx, cy - halfSize);
-          ctx.lineTo(cx, cy);
-          ctx.lineTo(cx - halfDx, cy - halfSize);
-          ctx.closePath();
-          ctx.strokeStyle = cell.color.stroke.replace('rgb', 'rgba').replace(')', `, ${alpha})`);
-          ctx.lineWidth = 1.6;
+          ctx.arc(cx, cy, 4.5, 0, Math.PI * 2);
+          ctx.strokeStyle = color.dot;
+          ctx.lineWidth = 0.8;
+          ctx.globalAlpha = nodeAlpha * 0.4;
           ctx.stroke();
 
-          // Anchor vertex node (radius 2.5) matching the dot color
-          ctx.beginPath();
-          ctx.arc(cx, cy - SIZE, 2.5, 0, Math.PI * 2);
-          ctx.fillStyle = cell.color.dot;
-          ctx.globalAlpha = Math.min(1.0, alpha * 1.2);
-          ctx.fill();
           ctx.globalAlpha = 1.0;
         }
       }
@@ -233,11 +227,9 @@ export const AmbientBackground: React.FC = () => {
       }
       if (idleTimer) clearTimeout(idleTimer);
       window.removeEventListener('mousemove', onUserInteraction);
-      window.removeEventListener('mousedown', onUserInteraction);
       window.removeEventListener('keydown', onUserInteraction);
-      window.removeEventListener('touchstart', onUserInteraction);
-      window.removeEventListener('touchmove', onUserInteraction);
       window.removeEventListener('scroll', onUserInteraction);
+      window.removeEventListener('touchstart', onUserInteraction);
       window.removeEventListener('resize', handleResize);
     };
   }, []);
@@ -246,7 +238,14 @@ export const AmbientBackground: React.FC = () => {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-0"
-      style={{ pointerEvents: 'none' }}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        pointerEvents: 'none',
+      }}
       aria-hidden="true"
     />
   );
