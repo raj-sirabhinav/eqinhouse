@@ -8,7 +8,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="relative min-h-screen">
+      <body className="relative min-h-screen bg-slate-50/80">
         <AmbientBackground />
         {children}
       </body>

@@ -77,8 +77,10 @@ export const AmbientBackground: React.FC = () => {
     };
 
     const handleResize = () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -214,7 +216,7 @@ export const AmbientBackground: React.FC = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none -z-10"
+      className="fixed inset-0 pointer-events-none z-0"
       style={{ pointerEvents: 'none' }}
       aria-hidden="true"
     />
