@@ -2,34 +2,31 @@
 
 import React, { useEffect, useRef } from 'react';
 
-interface Particle {
-  x: number;
-  y: number;
-  baseX: number;
-  baseY: number;
-  vx: number;
-  vy: number;
-  radius: number;
-  rgb: string;
-  alpha: number;
-  baseAlpha: number;
-  orbitAngle: number;
-  orbitRadius: number;
-  orbitSpeed: number;
-  pulsePhase: number;
-}
-
+// Color Spectrum: Full 7-color ROYGBIV palette across lattice cells
 const PALETTE = [
-  '5, 150, 105',   // Rich Emerald
-  '79, 70, 229',  // Royal Indigo
-  '124, 58, 237', // Electric Violet
-  '217, 119, 6',   // Warm Amber
-  '6, 182, 212'    // Vibrant Cyan-Teal
+  { stroke: 'rgb(239, 68, 68)', dot: '#f87171' },   // Red
+  { stroke: 'rgb(249, 115, 22)', dot: '#fb923c' },  // Orange
+  { stroke: 'rgb(234, 179, 8)', dot: '#facc15' },   // Yellow
+  { stroke: 'rgb(16, 185, 129)', dot: '#34d399' },  // Green
+  { stroke: 'rgb(37, 99, 235)', dot: '#60a5fa' },   // Blue
+  { stroke: 'rgb(99, 102, 241)', dot: '#818cf8' },  // Indigo
+  { stroke: 'rgb(168, 85, 247)', dot: '#c084fc' },  // Violet
 ];
 
-const PARTICLE_COUNT = 48;
-const CURSOR_REPEL_RADIUS = 130;
-const IDLE_TIMEOUT_MS = 15000; // 15-second inactivity window
+interface LatticeCell {
+  cx: number;
+  cy: number;
+  tier: number;
+  color: { stroke: string; dot: string };
+  // Pre-calculated isometric coordinates
+  // Top rhombus: cx, cy - SIZE (top); cx + dx/2, cy - SIZE/2 (right); cx, cy (center); cx - dx/2, cy - SIZE/2 (left)
+  // Cube bottom: cx, cy + SIZE (bottom); cx - dx/2, cy + SIZE/2 (bottom-left); cx + dx/2, cy + SIZE/2 (bottom-right)
+}
+
+const SIZE = 45;
+const DX = SIZE * Math.sqrt(3); // ≈ 77.94
+const DY = SIZE * 1.5;          // 67.5
+const IDLE_TIMEOUT_MS = 15000;  // 15 seconds
 
 export const AmbientBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -41,51 +38,67 @@ export const AmbientBackground: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let animFrameId: number;
+    let animFrameId: number | null = null;
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    let mouseX = -9999;
-    let mouseY = -9999;
     let isIdle = false;
     let currentOpacity = 0.0;
     let targetOpacity = 0.0;
+    let wave = 0;
+    let cells: LatticeCell[] = [];
     let idleTimer: ReturnType<typeof setTimeout> | null = null;
 
-    const resetIdleTimer = () => {
+    // Generate grid coordinates for isometric lattice
+    const generateGrid = () => {
+      cells = [];
+      const cols = Math.ceil(width / DX) + 3;
+      const rows = Math.ceil(height / DY) + 3;
+
+      let cellIndex = 0;
+      for (let r = -1; r < rows; r++) {
+        for (let c = -1; c < cols; c++) {
+          const offsetX = (r % 2 === 0) ? 0 : DX / 2;
+          const cx = c * DX + offsetX;
+          const cy = r * DY;
+
+          const tier = (c + r * 2) % PALETTE.length;
+          const colorIndex = ((tier % PALETTE.length) + PALETTE.length) % PALETTE.length;
+
+          cells.push({
+            cx,
+            cy,
+            tier: cellIndex % 7,
+            color: PALETTE[colorIndex],
+          });
+          cellIndex++;
+        }
+      }
+    };
+
+    generateGrid();
+
+    // Start render loop only when animating
+    const startRenderLoop = () => {
+      if (animFrameId === null) {
+        animFrameId = requestAnimationFrame(animate);
+      }
+    };
+
+    // User activity handler: immediately triggers fade out and resets idle countdown
+    const onUserInteraction = () => {
       isIdle = false;
       targetOpacity = 0.0;
+
       if (idleTimer) clearTimeout(idleTimer);
       idleTimer = setTimeout(() => {
         isIdle = true;
         targetOpacity = 1.0;
+        startRenderLoop();
       }, IDLE_TIMEOUT_MS);
-    };
 
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      resetIdleTimer();
-    };
-
-    const handleTouchStart = (e: TouchEvent) => {
-      if (e.touches.length > 0) {
-        mouseX = e.touches[0].clientX;
-        mouseY = e.touches[0].clientY;
-      }
-      resetIdleTimer();
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches.length > 0) {
-        mouseX = e.touches[0].clientX;
-        mouseY = e.touches[0].clientY;
-      }
-      resetIdleTimer();
-    };
-
-    const handleInteraction = () => {
-      resetIdleTimer();
+      // Keep loop running while currentOpacity transitions down to 0
+      startRenderLoop();
     };
 
     const handleResize = () => {
@@ -93,148 +106,138 @@ export const AmbientBackground: React.FC = () => {
       height = window.innerHeight;
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      generateGrid();
+      if (isIdle || currentOpacity > 0.001) {
+        startRenderLoop();
+      }
     };
 
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    window.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
-    window.addEventListener('scroll', handleInteraction, { passive: true });
-    window.addEventListener('keydown', handleInteraction, { passive: true });
+    window.addEventListener('mousemove', onUserInteraction, { passive: true });
+    window.addEventListener('mousedown', onUserInteraction, { passive: true });
+    window.addEventListener('keydown', onUserInteraction, { passive: true });
+    window.addEventListener('touchstart', onUserInteraction, { passive: true });
+    window.addEventListener('touchmove', onUserInteraction, { passive: true });
+    window.addEventListener('scroll', onUserInteraction, { passive: true });
     window.addEventListener('resize', handleResize);
 
-    resetIdleTimer();
+    // Initial idle timer setup
+    idleTimer = setTimeout(() => {
+      isIdle = true;
+      targetOpacity = 1.0;
+      startRenderLoop();
+    }, IDLE_TIMEOUT_MS);
 
-    // Initialize particles
-    const particles: Particle[] = [];
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      const x = Math.random() * width;
-      const y = Math.random() * height;
-      const radius = 1.8 + Math.random() * (4.3 - 1.8);
-      const rgb = PALETTE[Math.floor(Math.random() * PALETTE.length)];
-      const baseAlpha = 0.35 + Math.random() * 0.45;
-
-      particles.push({
-        x,
-        y,
-        baseX: x,
-        baseY: y,
-        vx: (Math.random() - 0.5) * 0.7,
-        vy: (Math.random() - 0.5) * 0.7,
-        radius,
-        rgb,
-        alpha: baseAlpha,
-        baseAlpha,
-        orbitAngle: Math.random() * Math.PI * 2,
-        orbitRadius: 20 + Math.random() * 55,
-        orbitSpeed: (0.008 + Math.random() * 0.015) * (Math.random() > 0.5 ? 1 : -1),
-        pulsePhase: Math.random() * Math.PI * 2,
-      });
-    }
-
-    let lastTime = performance.now();
-
-    const animate = (time: number) => {
-      const dt = Math.min((time - lastTime) / 1000, 0.1);
-      lastTime = time;
-
-      // Smooth lerp interpolation toward targetOpacity
-      currentOpacity += (targetOpacity - currentOpacity) * 0.1;
+    // Animation loop
+    const animate = () => {
+      // Smooth lerp transition for canvas opacity
+      currentOpacity += (targetOpacity - currentOpacity) * 0.08;
       if (Math.abs(currentOpacity - targetOpacity) < 0.001) {
         currentOpacity = targetOpacity;
       }
 
       ctx.clearRect(0, 0, width, height);
 
-      // When completely invisible, skip physics and drawing to save GPU/CPU cycles
-      if (currentOpacity > 0.001) {
-        for (let i = 0; i < particles.length; i++) {
-          const p = particles[i];
+      // If fully faded out and user is active, halt loop to eliminate CPU/GPU drain
+      if (currentOpacity <= 0.001 && !isIdle) {
+        currentOpacity = 0.0;
+        animFrameId = null;
+        return;
+      }
 
-          if (isIdle) {
-            // Harmonic orbital wave drifting
-            p.orbitAngle += p.orbitSpeed;
-            p.pulsePhase += 1.8 * dt;
+      wave += 0.012; // Smooth, slow ambient pulse progression
 
-            const targetX = p.baseX + Math.cos(p.orbitAngle) * p.orbitRadius;
-            const targetY = p.baseY + Math.sin(p.orbitAngle * 0.8) * (p.orbitRadius * 0.75);
+      const halfDx = DX / 2;
+      const halfSize = SIZE / 2;
 
-            // Smoothly attract towards orbit path
-            p.x += (targetX - p.x) * 0.04;
-            p.y += (targetY - p.y) * 0.04;
+      // 1. Structural Wireframe: faint base isometric cube lines with rgba(15, 23, 42, 0.035)
+      ctx.beginPath();
+      ctx.strokeStyle = `rgba(15, 23, 42, ${0.035 * currentOpacity})`;
+      ctx.lineWidth = 1;
 
-            // Subtle brightness pulsing in idle state
-            p.alpha = Math.max(0.15, Math.min(0.9, p.baseAlpha + Math.sin(p.pulsePhase) * 0.22));
-          } else {
-            // Standard gentle drift
-            p.x += p.vx;
-            p.y += p.vy;
+      for (let i = 0; i < cells.length; i++) {
+        const { cx, cy } = cells[i];
 
-            // Wrap edges smoothly
-            if (p.x < -20) { p.x = width + 20; p.baseX = p.x; }
-            if (p.x > width + 20) { p.x = -20; p.baseX = p.x; }
-            if (p.y < -20) { p.y = height + 20; p.baseY = p.y; }
-            if (p.y > height + 20) { p.y = -20; p.baseY = p.y; }
+        // Top rhombus wireframe
+        ctx.moveTo(cx, cy - SIZE);
+        ctx.lineTo(cx + halfDx, cy - halfSize);
+        ctx.lineTo(cx, cy);
+        ctx.lineTo(cx - halfDx, cy - halfSize);
+        ctx.closePath();
 
-            // Repel from cursor if within CURSOR_REPEL_RADIUS
-            const dx = p.x - mouseX;
-            const dy = p.y - mouseY;
-            const dist = Math.hypot(dx, dy);
+        // Downward vertical edges of the isometric cube
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx, cy + SIZE);
 
-            if (dist < CURSOR_REPEL_RADIUS && dist > 0) {
-              const force = (1 - dist / CURSOR_REPEL_RADIUS) * 3.5;
-              p.x += (dx / dist) * force;
-              p.y += (dy / dist) * force;
-            }
+        ctx.moveTo(cx - halfDx, cy - halfSize);
+        ctx.lineTo(cx - halfDx, cy + halfSize);
 
-            // Return alpha to normal
-            p.alpha += (p.baseAlpha - p.alpha) * 0.05;
-            p.baseX = p.x;
-            p.baseY = p.y;
-          }
+        ctx.moveTo(cx + halfDx, cy - halfSize);
+        ctx.lineTo(cx + halfDx, cy + halfSize);
 
-          // Effective alpha modulated by currentOpacity
-          const effectiveAlpha = p.alpha * currentOpacity;
+        // Bottom edges
+        ctx.moveTo(cx - halfDx, cy + halfSize);
+        ctx.lineTo(cx, cy + SIZE);
+        ctx.lineTo(cx + halfDx, cy + halfSize);
+      }
+      ctx.stroke();
 
-          // Draw particle with soft radial gradient glow halo and sharp core
-          const haloRadius = p.radius * 3.5;
-          const gradient = ctx.createRadialGradient(
-            p.x,
-            p.y,
-            0,
-            p.x,
-            p.y,
-            haloRadius
-          );
-          gradient.addColorStop(0, `rgba(${p.rgb}, ${effectiveAlpha * 0.75})`);
-          gradient.addColorStop(0.45, `rgba(${p.rgb}, ${effectiveAlpha * 0.3})`);
-          gradient.addColorStop(1, `rgba(${p.rgb}, 0)`);
+      // 2. Wave Dynamics & Highlight Accent
+      for (let i = 0; i < cells.length; i++) {
+        const cell = cells[i];
+        const phase = Math.sin(wave + cell.tier * 0.9 + (cell.cx + cell.cy) * 0.0018);
 
-          ctx.fillStyle = gradient;
+        // Only render illuminated isometric plane when phase > 0.3
+        if (phase > 0.3) {
+          const intensity = (phase - 0.3) / 0.7; // normalized 0..1
+          const alpha = intensity * 0.8 * currentOpacity;
+
+          const { cx, cy } = cell;
+
+          // Subtle top rhombus face illumination
           ctx.beginPath();
-          ctx.arc(p.x, p.y, haloRadius, 0, Math.PI * 2);
+          ctx.moveTo(cx, cy - SIZE);
+          ctx.lineTo(cx + halfDx, cy - halfSize);
+          ctx.lineTo(cx, cy);
+          ctx.lineTo(cx - halfDx, cy - halfSize);
+          ctx.closePath();
+          ctx.fillStyle = cell.color.stroke.replace('rgb', 'rgba').replace(')', `, ${alpha * 0.08})`);
           ctx.fill();
 
-          // Solid inner core for clarity on light backgrounds
-          ctx.fillStyle = `rgba(${p.rgb}, ${Math.min(1, effectiveAlpha * 1.3)})`;
+          // Active top rhombus edge highlight
           ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius * 0.75, 0, Math.PI * 2);
+          ctx.moveTo(cx, cy - SIZE);
+          ctx.lineTo(cx + halfDx, cy - halfSize);
+          ctx.lineTo(cx, cy);
+          ctx.lineTo(cx - halfDx, cy - halfSize);
+          ctx.closePath();
+          ctx.strokeStyle = cell.color.stroke.replace('rgb', 'rgba').replace(')', `, ${alpha})`);
+          ctx.lineWidth = 1.6;
+          ctx.stroke();
+
+          // Anchor vertex node (radius 2.5) matching the dot color
+          ctx.beginPath();
+          ctx.arc(cx, cy - SIZE, 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = cell.color.dot;
+          ctx.globalAlpha = Math.min(1.0, alpha * 1.2);
           ctx.fill();
+          ctx.globalAlpha = 1.0;
         }
       }
 
       animFrameId = requestAnimationFrame(animate);
     };
 
-    animFrameId = requestAnimationFrame(animate);
-
     return () => {
-      cancelAnimationFrame(animFrameId);
+      if (animFrameId !== null) {
+        cancelAnimationFrame(animFrameId);
+      }
       if (idleTimer) clearTimeout(idleTimer);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('scroll', handleInteraction);
-      window.removeEventListener('keydown', handleInteraction);
+      window.removeEventListener('mousemove', onUserInteraction);
+      window.removeEventListener('mousedown', onUserInteraction);
+      window.removeEventListener('keydown', onUserInteraction);
+      window.removeEventListener('touchstart', onUserInteraction);
+      window.removeEventListener('touchmove', onUserInteraction);
+      window.removeEventListener('scroll', onUserInteraction);
       window.removeEventListener('resize', handleResize);
     };
   }, []);
