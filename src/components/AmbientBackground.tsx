@@ -29,7 +29,7 @@ const PALETTE = [
 
 const PARTICLE_COUNT = 48;
 const CURSOR_REPEL_RADIUS = 130;
-const IDLE_TIMEOUT_MS = 2500;
+const IDLE_TIMEOUT_MS = 30000; // 30-second inactivity window
 
 export const AmbientBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -48,19 +48,31 @@ export const AmbientBackground: React.FC = () => {
     let mouseX = -9999;
     let mouseY = -9999;
     let isIdle = false;
+    let currentOpacity = 0.0;
+    let targetOpacity = 0.0;
     let idleTimer: ReturnType<typeof setTimeout> | null = null;
 
     const resetIdleTimer = () => {
       isIdle = false;
+      targetOpacity = 0.0;
       if (idleTimer) clearTimeout(idleTimer);
       idleTimer = setTimeout(() => {
         isIdle = true;
+        targetOpacity = 1.0;
       }, IDLE_TIMEOUT_MS);
     };
 
     const handleMouseMove = (e: MouseEvent) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
+      resetIdleTimer();
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        mouseX = e.touches[0].clientX;
+        mouseY = e.touches[0].clientY;
+      }
       resetIdleTimer();
     };
 
@@ -84,6 +96,7 @@ export const AmbientBackground: React.FC = () => {
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
     window.addEventListener('touchmove', handleTouchMove, { passive: true });
     window.addEventListener('scroll', handleInteraction, { passive: true });
     window.addEventListener('keydown', handleInteraction, { passive: true });
@@ -124,77 +137,89 @@ export const AmbientBackground: React.FC = () => {
       const dt = Math.min((time - lastTime) / 1000, 0.1);
       lastTime = time;
 
+      // Smooth lerp interpolation toward targetOpacity
+      currentOpacity += (targetOpacity - currentOpacity) * 0.1;
+      if (Math.abs(currentOpacity - targetOpacity) < 0.001) {
+        currentOpacity = targetOpacity;
+      }
+
       ctx.clearRect(0, 0, width, height);
 
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
+      // When completely invisible, skip physics and drawing to save GPU/CPU cycles
+      if (currentOpacity > 0.001) {
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
 
-        if (isIdle) {
-          // Harmonic orbital wave drifting
-          p.orbitAngle += p.orbitSpeed;
-          p.pulsePhase += 1.8 * dt;
+          if (isIdle) {
+            // Harmonic orbital wave drifting
+            p.orbitAngle += p.orbitSpeed;
+            p.pulsePhase += 1.8 * dt;
 
-          const targetX = p.baseX + Math.cos(p.orbitAngle) * p.orbitRadius;
-          const targetY = p.baseY + Math.sin(p.orbitAngle * 0.8) * (p.orbitRadius * 0.75);
+            const targetX = p.baseX + Math.cos(p.orbitAngle) * p.orbitRadius;
+            const targetY = p.baseY + Math.sin(p.orbitAngle * 0.8) * (p.orbitRadius * 0.75);
 
-          // Smoothly attract towards orbit path
-          p.x += (targetX - p.x) * 0.04;
-          p.y += (targetY - p.y) * 0.04;
+            // Smoothly attract towards orbit path
+            p.x += (targetX - p.x) * 0.04;
+            p.y += (targetY - p.y) * 0.04;
 
-          // Subtle brightness pulsing in idle state
-          p.alpha = Math.max(0.15, Math.min(0.9, p.baseAlpha + Math.sin(p.pulsePhase) * 0.22));
-        } else {
-          // Standard gentle drift
-          p.x += p.vx;
-          p.y += p.vy;
+            // Subtle brightness pulsing in idle state
+            p.alpha = Math.max(0.15, Math.min(0.9, p.baseAlpha + Math.sin(p.pulsePhase) * 0.22));
+          } else {
+            // Standard gentle drift
+            p.x += p.vx;
+            p.y += p.vy;
 
-          // Wrap edges smoothly
-          if (p.x < -20) { p.x = width + 20; p.baseX = p.x; }
-          if (p.x > width + 20) { p.x = -20; p.baseX = p.x; }
-          if (p.y < -20) { p.y = height + 20; p.baseY = p.y; }
-          if (p.y > height + 20) { p.y = -20; p.baseY = p.y; }
+            // Wrap edges smoothly
+            if (p.x < -20) { p.x = width + 20; p.baseX = p.x; }
+            if (p.x > width + 20) { p.x = -20; p.baseX = p.x; }
+            if (p.y < -20) { p.y = height + 20; p.baseY = p.y; }
+            if (p.y > height + 20) { p.y = -20; p.baseY = p.y; }
 
-          // Repel from cursor if within CURSOR_REPEL_RADIUS
-          const dx = p.x - mouseX;
-          const dy = p.y - mouseY;
-          const dist = Math.hypot(dx, dy);
+            // Repel from cursor if within CURSOR_REPEL_RADIUS
+            const dx = p.x - mouseX;
+            const dy = p.y - mouseY;
+            const dist = Math.hypot(dx, dy);
 
-          if (dist < CURSOR_REPEL_RADIUS && dist > 0) {
-            const force = (1 - dist / CURSOR_REPEL_RADIUS) * 3.5;
-            p.x += (dx / dist) * force;
-            p.y += (dy / dist) * force;
+            if (dist < CURSOR_REPEL_RADIUS && dist > 0) {
+              const force = (1 - dist / CURSOR_REPEL_RADIUS) * 3.5;
+              p.x += (dx / dist) * force;
+              p.y += (dy / dist) * force;
+            }
+
+            // Return alpha to normal
+            p.alpha += (p.baseAlpha - p.alpha) * 0.05;
+            p.baseX = p.x;
+            p.baseY = p.y;
           }
 
-          // Return alpha to normal
-          p.alpha += (p.baseAlpha - p.alpha) * 0.05;
-          p.baseX = p.x;
-          p.baseY = p.y;
+          // Effective alpha modulated by currentOpacity
+          const effectiveAlpha = p.alpha * currentOpacity;
+
+          // Draw particle with soft radial gradient glow halo and sharp core
+          const haloRadius = p.radius * 3.5;
+          const gradient = ctx.createRadialGradient(
+            p.x,
+            p.y,
+            0,
+            p.x,
+            p.y,
+            haloRadius
+          );
+          gradient.addColorStop(0, `rgba(${p.rgb}, ${effectiveAlpha * 0.75})`);
+          gradient.addColorStop(0.45, `rgba(${p.rgb}, ${effectiveAlpha * 0.3})`);
+          gradient.addColorStop(1, `rgba(${p.rgb}, 0)`);
+
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, haloRadius, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Solid inner core for clarity on light backgrounds
+          ctx.fillStyle = `rgba(${p.rgb}, ${Math.min(1, effectiveAlpha * 1.3)})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius * 0.75, 0, Math.PI * 2);
+          ctx.fill();
         }
-
-        // Draw particle with soft radial gradient glow halo and sharp core
-        const haloRadius = p.radius * 3.5;
-        const gradient = ctx.createRadialGradient(
-          p.x,
-          p.y,
-          0,
-          p.x,
-          p.y,
-          haloRadius
-        );
-        gradient.addColorStop(0, `rgba(${p.rgb}, ${p.alpha * 0.75})`);
-        gradient.addColorStop(0.45, `rgba(${p.rgb}, ${p.alpha * 0.3})`);
-        gradient.addColorStop(1, `rgba(${p.rgb}, 0)`);
-
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, haloRadius, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Solid inner core for clarity on light backgrounds
-        ctx.fillStyle = `rgba(${p.rgb}, ${Math.min(1, p.alpha * 1.3)})`;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius * 0.75, 0, Math.PI * 2);
-        ctx.fill();
       }
 
       animFrameId = requestAnimationFrame(animate);
@@ -206,6 +231,7 @@ export const AmbientBackground: React.FC = () => {
       cancelAnimationFrame(animFrameId);
       if (idleTimer) clearTimeout(idleTimer);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('scroll', handleInteraction);
       window.removeEventListener('keydown', handleInteraction);
