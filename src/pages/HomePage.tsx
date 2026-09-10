@@ -82,17 +82,17 @@ export const HomePage: React.FC = () => {
       {/* =========================================================================
           SECTION 1: HERO & MAIN PIPELINE LATENCY FINANCIAL IMPACT CALCULATOR
          ========================================================================= */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-12 sm:pb-16">
-        {/* Balanced Two-Column Split Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 pb-12 sm:pb-16">
+        {/* Balanced Two-Column Split Layout with Top Baseline Alignment */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-start">
           
           {/* LEFT COLUMN: Conversion & Value Narrative */}
-          <div className="lg:col-span-7 text-left">
+          <div className="lg:col-span-7 text-left flex flex-col justify-start">
             <motion.div
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#E6DFD5]/40 border border-[#E6DFD5] text-xs font-mono text-[#3F3D56] mb-6 shadow-xs"
+              className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#E6DFD5]/40 border border-[#E6DFD5] text-xs font-mono text-[#3F3D56] mb-6 shadow-xs self-start"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-[#6366F1] animate-ping" />
               <span className="font-semibold text-[#000000]">SPEED-TO-LEAD &amp; REVOPS ARCHITECTURE</span>
@@ -161,10 +161,10 @@ export const HomePage: React.FC = () => {
 
           {/* RIGHT COLUMN: The Hero System Visual — 3-Pillar Enterprise RevOps Architecture */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
-            className="lg:col-span-5 w-full"
+            initial={{ opacity: 0, y: 0, x: 12 }}
+            animate={{ opacity: 1, y: 0, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="lg:col-span-5 w-full flex flex-col justify-start"
           >
             <div className="rounded-2xl border border-[#e2e8f0] bg-white/95 backdrop-blur-xs p-5 sm:p-6 shadow-[0_8px_30px_rgb(0,0,0,0.06)] relative overflow-hidden">
               
