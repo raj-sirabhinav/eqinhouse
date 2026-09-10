@@ -11,7 +11,13 @@ import {
   AlertTriangle,
   Check,
   Sliders,
-  XCircle
+  XCircle,
+  ShieldCheck,
+  Workflow,
+  MessageSquare,
+  CheckCircle2,
+  Clock,
+  Sparkles
 } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
@@ -77,64 +83,272 @@ export const HomePage: React.FC = () => {
       {/* =========================================================================
           SECTION 1: HERO & MAIN PIPELINE LATENCY FINANCIAL IMPACT CALCULATOR
          ========================================================================= */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-6">
-        {/* Editorial Top Eyebrow */}
-        <div className="text-center max-w-3xl mx-auto mb-10">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-12 sm:pb-16">
+        {/* Balanced Two-Column Split Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
+          
+          {/* LEFT COLUMN: Conversion & Value Narrative */}
+          <div className="lg:col-span-7 text-left">
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#E6DFD5]/40 border border-[#E6DFD5] text-xs font-mono text-[#3F3D56] mb-6 shadow-xs"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-[#6366F1] animate-ping" />
+              <span className="font-semibold text-[#000000]">SPEED-TO-LEAD &amp; REVOPS ARCHITECTURE</span>
+              <span className="text-[#94a3b8]">&bull;</span>
+              <span>B2B SAAS ($3M–$30M ARR)</span>
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-4xl sm:text-5xl lg:text-6xl font-serif text-[#000000] leading-[1.08] tracking-tight font-normal"
+            >
+              Your inbound sales form is silently burning{' '}
+              <span className="italic text-[#6366F1]">30% of your qualified pipeline.</span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mt-6 text-base sm:text-lg text-[#3F3D56] max-w-xl leading-relaxed font-sans font-normal"
+            >
+              We stop inbound lead drop-off. Enrich high-value prospects, keep your CRM spotless, and route demo requests directly to your reps&apos; Slack calendars in under 60 seconds.
+            </motion.p>
+
+            {/* Primary CTA Group */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.25 }}
+              className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5"
+            >
+              <Link
+                to="/intake"
+                className="inline-flex items-center justify-center px-6 py-3.5 rounded-lg text-sm font-semibold text-white bg-[#6366F1] hover:bg-[#4F46E5] shadow-xs hover:shadow-sm transition-all group"
+              >
+                <span>Book GTM Architecture Diagnostic ($3,500)</span>
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+
+              <Link
+                to="/stack"
+                className="inline-flex items-center justify-center px-5 py-3.5 rounded-lg text-sm font-medium text-[#0f172a] bg-white hover:bg-[#FAF8F5] border border-[#cbd5e1] hover:border-[#94a3b8] shadow-xs transition-all"
+              >
+                <span>Explore The Architecture Stack</span>
+              </Link>
+            </motion.div>
+
+            {/* Micro proof ticker */}
+            <div className="mt-8 pt-6 border-t border-[#E6DFD5]/70 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-mono text-[#3F3D56]">
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                <span>Deterministic &lt;60s SLA</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <ShieldCheck className="h-3.5 w-3.5 text-[#6366F1]" />
+                <span>100% CRM Schema Lock</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-amber-600" />
+                <span>94.8% Match Rate</span>
+              </span>
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN: The Hero System Visual — Anatomy of the Sub-60s Router */}
           <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#E6DFD5]/40 border border-[#E6DFD5] text-xs font-mono text-[#3F3D56] mb-6"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.25 }}
+            className="lg:col-span-5 w-full"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#6366F1] animate-ping" />
-            <span className="font-semibold text-[#000000]">SPEED-TO-LEAD &amp; REVOPS ARCHITECTURE</span>
-            <span className="text-[#E6DFD5]">&bull;</span>
-            <span>B2B SAAS ($3M–$30M ARR)</span>
+            <div className="rounded-2xl border border-[#e2e8f0] bg-white/95 backdrop-blur-xs p-5 sm:p-6 shadow-[0_8px_30px_rgb(0,0,0,0.06)] relative overflow-hidden">
+              
+              {/* Card Header */}
+              <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#f1f5f9]">
+                <div className="flex items-center gap-2">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+                  </span>
+                  <span className="text-xs font-mono font-semibold text-[#0f172a] uppercase tracking-wider">
+                    Anatomy of the Sub-60s Router
+                  </span>
+                </div>
+                <span className="text-[11px] font-mono px-2 py-0.5 rounded-sm bg-emerald-50 border border-emerald-200 text-emerald-700 font-semibold">
+                  LIVE PIPELINE
+                </span>
+              </div>
+
+              {/* Sequential Architecture Pipeline Diagram */}
+              <div className="space-y-3 relative">
+                
+                {/* Connecting backbone trace */}
+                <div className="absolute left-[19px] top-6 bottom-6 w-[2px] bg-gradient-to-b from-blue-400 via-emerald-400 to-indigo-500 opacity-30 pointer-events-none" />
+
+                {/* Stage 01: Inbound Webhook Ingest */}
+                <div className="relative flex items-start gap-3.5 p-3 rounded-xl bg-[#f8fafc] border border-[#e2e8f0] hover:border-blue-300 transition-colors group">
+                  <div className="relative z-10 w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <Zap className="h-3.5 w-3.5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-semibold text-[#0f172a] tracking-tight">
+                        Stage 01: Inbound Webhook Ingest
+                      </span>
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0 font-medium">
+                        &lt;120ms latency
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-[#64748b] mt-0.5 leading-snug">
+                      High-throughput HTTP trigger validating form payload &amp; domain sanitization.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Pulse Connector 1 */}
+                <div className="flex justify-center -my-1">
+                  <span className="text-[10px] font-mono text-[#94a3b8] flex items-center gap-1">
+                    <span className="h-1 w-1 rounded-full bg-blue-500 animate-pulse" />
+                    <span>stream verified</span>
+                  </span>
+                </div>
+
+                {/* Stage 02: Clay Waterfall Cascade */}
+                <div className="relative flex items-start gap-3.5 p-3 rounded-xl bg-[#f8fafc] border border-[#e2e8f0] hover:border-amber-300 transition-colors group">
+                  <div className="relative z-10 w-7 h-7 rounded-lg bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <Workflow className="h-3.5 w-3.5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-semibold text-[#0f172a] tracking-tight">
+                        Stage 02: Clay Waterfall Cascade
+                      </span>
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-amber-50 text-amber-700 border border-amber-200 shrink-0 font-medium">
+                        94.8% match
+                      </span>
+                    </div>
+                    <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-white border border-[#e2e8f0] text-[#334155]">
+                        Apollo
+                      </span>
+                      <span className="text-[#94a3b8] text-[10px]">&rarr;</span>
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-white border border-[#e2e8f0] text-[#334155]">
+                        Prospeo
+                      </span>
+                      <span className="text-[#94a3b8] text-[10px]">&rarr;</span>
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-white border border-[#e2e8f0] text-[#334155]">
+                        Datagma
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Pulse Connector 2 */}
+                <div className="flex justify-center -my-1">
+                  <span className="text-[10px] font-mono text-[#94a3b8] flex items-center gap-1">
+                    <span className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>enrichment locked</span>
+                  </span>
+                </div>
+
+                {/* Stage 03: CRM Schema Guard */}
+                <div className="relative flex items-start gap-3.5 p-3 rounded-xl bg-[#f8fafc] border border-[#e2e8f0] hover:border-emerald-300 transition-colors group">
+                  <div className="relative z-10 w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <ShieldCheck className="h-3.5 w-3.5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-semibold text-[#0f172a] tracking-tight">
+                        Stage 03: CRM Schema Guard
+                      </span>
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0 font-medium">
+                        0 dupes
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-[#64748b] mt-0.5 leading-snug">
+                      HubSpot / Salesforce domain dedup lock &amp; strict schema property enforcement.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Pulse Connector 3 */}
+                <div className="flex justify-center -my-1">
+                  <span className="text-[10px] font-mono text-[#94a3b8] flex items-center gap-1">
+                    <span className="h-1 w-1 rounded-full bg-[#6366F1] animate-pulse" />
+                    <span>dispatched &lt;30s</span>
+                  </span>
+                </div>
+
+                {/* Stage 04: Slack Deal Desk Handoff */}
+                <div className="relative p-3 rounded-xl bg-gradient-to-br from-[#1e1b4b] to-[#0f172a] text-white border border-[#312e81] shadow-xs">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 rounded-md bg-[#6366F1] flex items-center justify-center text-white">
+                        <MessageSquare className="h-3 w-3" />
+                      </div>
+                      <span className="text-[11px] font-mono font-semibold text-[#c7d2fe]">
+                        Stage 04: Slack Deal Desk
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold">
+                      DELIVERED 28.6s
+                    </span>
+                  </div>
+
+                  {/* Interactive Slack Deal Alert Mini-card */}
+                  <div className="p-2.5 rounded-lg bg-white/10 backdrop-blur-xs border border-white/10 text-xs">
+                    <div className="flex items-center justify-between font-mono text-[11px] text-amber-300">
+                      <span className="flex items-center gap-1 font-bold">
+                        <span>🔥</span> Tier 1 Demo Request
+                      </span>
+                      <span className="text-white font-semibold">$35,000 ACV</span>
+                    </div>
+                    <p className="text-[11px] text-slate-300 mt-1">
+                      Account: <strong className="text-white font-medium">Acme Corp ($18M ARR)</strong> &bull; VP of RevOps claimed by <strong className="text-emerald-300 font-medium">Sarah M.</strong>
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Architectural Card Footer Telemetry */}
+              <div className="mt-4 pt-3 border-t border-[#f1f5f9] flex items-center justify-between text-[11px] font-mono text-[#64748b]">
+                <span className="flex items-center gap-1.5">
+                  <Clock className="h-3 w-3 text-emerald-600" />
+                  <span>TOTAL DISPATCH: 28.6s</span>
+                </span>
+                <span className="text-[#0f172a] font-semibold">SLA: &lt;60s GUARANTEED</span>
+              </div>
+            </div>
           </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-4xl sm:text-6xl md:text-7xl font-serif text-[#000000] leading-[1.06] tracking-tight font-normal"
-          >
-            Your inbound sales form is silently burning{' '}
-            <span className="italic text-[#6366F1]">30% of your qualified pipeline.</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-6 text-lg sm:text-xl text-[#3F3D56] max-w-2xl mx-auto leading-relaxed font-sans font-normal"
-          >
-            We stop inbound lead drop-off. Enrich high-value prospects, keep your CRM spotless, and route demo requests directly to your reps&apos; Slack calendars in under 60 seconds.
-          </motion.p>
-
-          {/* Executive Hero CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.25 }}
-            className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5"
-          >
-            <Link
-              to="/intake"
-              className="inline-flex items-center justify-center px-6 py-3.5 rounded-lg text-sm font-semibold text-white bg-[#6366F1] hover:bg-[#4F46E5] shadow-xs hover:shadow-sm transition-all group"
-            >
-              <span>Book GTM Architecture Diagnostic ($3,500)</span>
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
-
-            <Link
-              to="/stack"
-              className="inline-flex items-center justify-center px-5 py-3.5 rounded-lg text-sm font-medium text-[#000000] bg-white hover:bg-[#FAF8F5] border border-[#E6DFD5] shadow-xs transition-colors"
-            >
-              <span>Explore The Architecture Stack</span>
-            </Link>
-          </motion.div>
         </div>
+      </section>
 
+      {/* =========================================================================
+          SECTION DIVIDER & BENCHMARK TRANSITION
+         ========================================================================= */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-4 my-2">
+          <div className="h-[1px] flex-1 bg-[#E6DFD5]" />
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#E6DFD5]/40 border border-[#E6DFD5] text-[11px] font-mono text-[#64748b]">
+            <Sliders className="h-3 w-3 text-[#6366F1]" />
+            <span>// BENCHMARK_SIMULATOR</span>
+          </div>
+          <div className="h-[1px] flex-1 bg-[#E6DFD5]" />
+        </div>
+      </div>
+
+      {/* =========================================================================
+          SECTION 2: PIPELINE LATENCY & FINANCIAL IMPACT CALCULATOR
+         ========================================================================= */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6">
         {/* HERO CENTERPIECE: Pipeline Latency & Financial Impact Calculator */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
