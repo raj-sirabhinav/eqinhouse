@@ -106,8 +106,8 @@ export const HomePage: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="text-4xl sm:text-5xl lg:text-6xl font-serif text-[#000000] leading-[1.08] tracking-tight font-normal"
             >
-              Your inbound sales form is silently burning{' '}
-              <span className="italic text-[#6366F1]">30% of your qualified pipeline.</span>
+              Your inbound sales form is silently destroying{' '}
+              <span className="italic text-[#6366F1]">a 21x lead qualification advantage.</span>
             </motion.h1>
 
             <motion.p
@@ -116,7 +116,7 @@ export const HomePage: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="mt-6 text-base sm:text-lg text-[#3F3D56] max-w-xl leading-relaxed font-sans font-normal"
             >
-              We stop inbound lead drop-off. Enrich high-value prospects, keep your CRM spotless, and route demo requests directly to your reps&apos; Slack calendars in under 60 seconds.
+              MIT research reveals reps responding within 5 minutes are 21x more likely to qualify prospects. We engineer sub-60s webhook routing, automated waterfall enrichment, and CRM governance so your sales team locks in that window every single time.
             </motion.p>
 
             {/* Primary CTA Group */}
