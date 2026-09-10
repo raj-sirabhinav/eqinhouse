@@ -14,10 +14,9 @@ import {
   XCircle,
   ShieldCheck,
   Workflow,
-  MessageSquare,
   CheckCircle2,
-  Clock,
-  Sparkles
+  Sparkles,
+  TrendingUp
 } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
@@ -160,7 +159,7 @@ export const HomePage: React.FC = () => {
             </div>
           </div>
 
-          {/* RIGHT COLUMN: The Hero System Visual — Anatomy of the Sub-60s Router */}
+          {/* RIGHT COLUMN: The Hero System Visual — 3-Pillar Enterprise RevOps Architecture */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -177,11 +176,12 @@ export const HomePage: React.FC = () => {
                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
                   </span>
                   <span className="text-xs font-mono font-semibold text-[#0f172a] uppercase tracking-wider">
-                    Anatomy of the Sub-60s Router
+                    ENTERPRISE REVOPS ARCHITECTURE
                   </span>
                 </div>
-                <span className="text-[11px] font-mono px-2 py-0.5 rounded-sm bg-emerald-50 border border-emerald-200 text-emerald-700 font-semibold">
-                  LIVE PIPELINE
+                <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-semibold flex items-center gap-1">
+                  <TrendingUp className="h-3 w-3 text-emerald-600" />
+                  <span>COMPOUNDING ROI</span>
                 </span>
               </div>
 
@@ -189,37 +189,41 @@ export const HomePage: React.FC = () => {
               <div className="space-y-3 relative">
                 
                 {/* Connecting backbone trace */}
-                <div className="absolute left-[19px] top-6 bottom-6 w-[2px] bg-gradient-to-b from-blue-400 via-emerald-400 to-indigo-500 opacity-30 pointer-events-none" />
+                <div className="absolute left-[19px] top-6 bottom-6 w-[2px] bg-gradient-to-b from-cyan-400 via-amber-400 to-emerald-500 opacity-30 pointer-events-none" />
 
-                {/* Stage 01: Inbound Webhook Ingest */}
-                <div className="relative flex items-start gap-3.5 p-3 rounded-xl bg-[#f8fafc] border border-[#e2e8f0] hover:border-blue-300 transition-colors group">
-                  <div className="relative z-10 w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                {/* Pillar 01: Inbound Webhook Routing (<60s SLA) */}
+                <div className="relative flex items-start gap-3.5 p-3 rounded-xl bg-[#f8fafc] border border-[#e2e8f0] hover:border-cyan-300 transition-colors group">
+                  <div className="relative z-10 w-7 h-7 rounded-lg bg-cyan-600 text-white flex items-center justify-center shrink-0 shadow-xs">
                     <Zap className="h-3.5 w-3.5" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-xs font-semibold text-[#0f172a] tracking-tight">
-                        Stage 01: Inbound Webhook Ingest
+                        Pillar 01: Inbound Webhook Routing
                       </span>
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0 font-medium">
-                        &lt;120ms latency
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-cyan-50 text-cyan-700 border border-cyan-200 shrink-0 font-semibold">
+                        &lt;60s SLA
                       </span>
                     </div>
                     <p className="text-[11px] text-[#64748b] mt-0.5 leading-snug">
-                      High-throughput HTTP trigger validating form payload &amp; domain sanitization.
+                      Sub-120ms ingestion and instantaneous Slack calendar handoff before prospect intent decays.
                     </p>
+                    <div className="mt-1.5 flex items-center gap-1.5 text-[10px] font-mono text-cyan-700 font-medium">
+                      <CheckCircle2 className="h-3 w-3 text-cyan-600" />
+                      <span>+391% contact rate retained</span>
+                    </div>
                   </div>
                 </div>
 
-                {/* Pulse Connector 1 */}
+                {/* Connector 1 */}
                 <div className="flex justify-center -my-1">
-                  <span className="text-[10px] font-mono text-[#94a3b8] flex items-center gap-1">
-                    <span className="h-1 w-1 rounded-full bg-blue-500 animate-pulse" />
-                    <span>stream verified</span>
+                  <span className="text-[10px] font-mono text-[#94a3b8] flex items-center gap-1 border-t border-dotted border-[#cbd5e1] pt-1 px-2">
+                    <span className="h-1 w-1 rounded-full bg-cyan-500 animate-pulse" />
+                    <span>&bull; 0-loss stream</span>
                   </span>
                 </div>
 
-                {/* Stage 02: Clay Waterfall Cascade */}
+                {/* Pillar 02: Clay Multi-Vendor Waterfall Engine */}
                 <div className="relative flex items-start gap-3.5 p-3 rounded-xl bg-[#f8fafc] border border-[#e2e8f0] hover:border-amber-300 transition-colors group">
                   <div className="relative z-10 w-7 h-7 rounded-lg bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs">
                     <Workflow className="h-3.5 w-3.5" />
@@ -227,91 +231,102 @@ export const HomePage: React.FC = () => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-xs font-semibold text-[#0f172a] tracking-tight">
-                        Stage 02: Clay Waterfall Cascade
+                        Pillar 02: Automated Waterfall Enrichment
                       </span>
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-amber-50 text-amber-700 border border-amber-200 shrink-0 font-medium">
-                        94.8% match
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-amber-50 text-amber-700 border border-amber-200 shrink-0 font-semibold">
+                        94.8% Match
                       </span>
                     </div>
-                    <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-white border border-[#e2e8f0] text-[#334155]">
-                        Apollo
-                      </span>
-                      <span className="text-[#94a3b8] text-[10px]">&rarr;</span>
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-white border border-[#e2e8f0] text-[#334155]">
-                        Prospeo
-                      </span>
-                      <span className="text-[#94a3b8] text-[10px]">&rarr;</span>
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-white border border-[#e2e8f0] text-[#334155]">
-                        Datagma
-                      </span>
+                    <p className="text-[11px] text-[#64748b] mt-0.5 leading-snug">
+                      Apollo &rarr; Prospeo &rarr; Datagma cascade. Verified mobile dials and executive work emails.
+                    </p>
+                    <div className="mt-1.5 flex items-center gap-1.5 text-[10px] font-mono text-amber-700 font-medium">
+                      <CheckCircle2 className="h-3 w-3 text-amber-600" />
+                      <span>15+ hrs/rep/week reclaimed</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Pulse Connector 2 */}
+                {/* Connector 2 */}
                 <div className="flex justify-center -my-1">
-                  <span className="text-[10px] font-mono text-[#94a3b8] flex items-center gap-1">
-                    <span className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
-                    <span>enrichment locked</span>
+                  <span className="text-[10px] font-mono text-[#94a3b8] flex items-center gap-1 border-t border-dotted border-[#cbd5e1] pt-1 px-2">
+                    <span className="h-1 w-1 rounded-full bg-amber-500 animate-pulse" />
+                    <span>&bull; zero rep research</span>
                   </span>
                 </div>
 
-                {/* Stage 03: CRM Schema Guard */}
-                <div className="relative flex items-start gap-3.5 p-3 rounded-xl bg-[#f8fafc] border border-[#e2e8f0] hover:border-emerald-300 transition-colors group">
-                  <div className="relative z-10 w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                {/* Pillar 03: Governed CRM Schema Lock (HubSpot / SFDC) */}
+                <div className="relative flex items-start gap-3.5 p-3 rounded-xl bg-[#f8fafc] border border-[#e2e8f0] hover:border-blue-300 transition-colors group">
+                  <div className="relative z-10 w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
                     <ShieldCheck className="h-3.5 w-3.5" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-xs font-semibold text-[#0f172a] tracking-tight">
-                        Stage 03: CRM Schema Guard
+                        Pillar 03: Governed CRM Architecture
                       </span>
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0 font-medium">
-                        0 dupes
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-blue-50 text-blue-700 border border-blue-200 shrink-0 font-semibold">
+                        0 Schema Drift
                       </span>
                     </div>
                     <p className="text-[11px] text-[#64748b] mt-0.5 leading-snug">
-                      HubSpot / Salesforce domain dedup lock &amp; strict schema property enforcement.
+                      Root-domain deduplication, locked picklists, and deterministic ownership assignment.
                     </p>
+                    <div className="mt-1.5 flex items-center gap-1.5 text-[10px] font-mono text-blue-700 font-medium">
+                      <CheckCircle2 className="h-3 w-3 text-blue-600" />
+                      <span>100% clean pipeline data</span>
+                    </div>
                   </div>
                 </div>
 
-                {/* Pulse Connector 3 */}
+                {/* Connector 3 */}
                 <div className="flex justify-center -my-1">
-                  <span className="text-[10px] font-mono text-[#94a3b8] flex items-center gap-1">
-                    <span className="h-1 w-1 rounded-full bg-[#6366F1] animate-pulse" />
-                    <span>dispatched &lt;30s</span>
+                  <span className="text-[10px] font-mono text-[#94a3b8] flex items-center gap-1 border-t border-dotted border-[#cbd5e1] pt-1 px-2">
+                    <span className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>&bull; compounded conversion</span>
                   </span>
                 </div>
 
-                {/* Stage 04: Slack Deal Desk Handoff */}
-                <div className="relative p-3 rounded-xl bg-gradient-to-br from-[#1e1b4b] to-[#0f172a] text-white border border-[#312e81] shadow-xs">
-                  <div className="flex items-center justify-between mb-2">
+                {/* Stage 04: The Net Business Profit / Financial Outcome (Dark Accent Container) */}
+                <div className="relative p-3.5 rounded-xl bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] text-white border border-[#334155] shadow-sm">
+                  <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-white/10">
                     <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-md bg-[#6366F1] flex items-center justify-center text-white">
-                        <MessageSquare className="h-3 w-3" />
+                      <div className="w-5 h-5 rounded-md bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30">
+                        <TrendingUp className="h-3 w-3" />
                       </div>
-                      <span className="text-[11px] font-mono font-semibold text-[#c7d2fe]">
-                        Stage 04: Slack Deal Desk
+                      <span className="text-[11px] font-mono font-semibold text-slate-200 tracking-wider">
+                        FINANCIAL OUTCOME // 12-MONTH IMPACT
                       </span>
                     </div>
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold">
-                      DELIVERED 28.6s
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500 text-white font-bold tracking-tight shadow-xs">
+                      ROI: 12.8x
                     </span>
                   </div>
 
-                  {/* Interactive Slack Deal Alert Mini-card */}
-                  <div className="p-2.5 rounded-lg bg-white/10 backdrop-blur-xs border border-white/10 text-xs">
-                    <div className="flex items-center justify-between font-mono text-[11px] text-amber-300">
-                      <span className="flex items-center gap-1 font-bold">
-                        <span>🔥</span> Tier 1 Demo Request
-                      </span>
-                      <span className="text-white font-semibold">$35,000 ACV</span>
+                  {/* High-Impact Outcome Metrics */}
+                  <div className="grid grid-cols-2 gap-2.5 mb-2">
+                    <div className="p-2 rounded-lg bg-white/5 border border-white/10">
+                      <div className="text-base font-bold text-emerald-400 font-mono tracking-tight leading-none">
+                        +$420,000 / yr
+                      </div>
+                      <div className="text-[10px] text-slate-300 mt-1 leading-tight">
+                        Protected pipeline from sub-60s speed-to-lead
+                      </div>
                     </div>
-                    <p className="text-[11px] text-slate-300 mt-1">
-                      Account: <strong className="text-white font-medium">Acme Corp ($18M ARR)</strong> &bull; VP of RevOps claimed by <strong className="text-emerald-300 font-medium">Sarah M.</strong>
-                    </p>
+
+                    <div className="p-2 rounded-lg bg-white/5 border border-white/10">
+                      <div className="text-base font-bold text-cyan-300 font-mono tracking-tight leading-none">
+                        60+ Hours / mo
+                      </div>
+                      <div className="text-[10px] text-slate-300 mt-1 leading-tight">
+                        Rep selling capacity restored from manual research
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Modeled assumption sub-text */}
+                  <div className="text-[10px] font-mono text-slate-400 text-center">
+                    Modeled on $25k–$35k ACV across 40 inbounds/mo
                   </div>
                 </div>
 
@@ -319,11 +334,13 @@ export const HomePage: React.FC = () => {
 
               {/* Architectural Card Footer Telemetry */}
               <div className="mt-4 pt-3 border-t border-[#f1f5f9] flex items-center justify-between text-[11px] font-mono text-[#64748b]">
-                <span className="flex items-center gap-1.5">
-                  <Clock className="h-3 w-3 text-emerald-600" />
-                  <span>TOTAL DISPATCH: 28.6s</span>
+                <span className="flex items-center gap-1.5 font-semibold text-[#0f172a]">
+                  <TrendingUp className="h-3.5 w-3.5 text-emerald-600" />
+                  <span>TOTAL PIPELINE LIFT: +$420K</span>
                 </span>
-                <span className="text-[#0f172a] font-semibold">SLA: &lt;60s GUARANTEED</span>
+                <span className="text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-sm border border-emerald-200">
+                  GUARANTEED DETERMINISTIC SLA
+                </span>
               </div>
             </div>
           </motion.div>
