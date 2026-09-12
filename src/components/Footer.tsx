@@ -44,7 +44,7 @@ export const Footer: React.FC = () => {
               </span>
             </div>
             <p className="text-sm text-[var(--text-secondary)] leading-relaxed max-w-sm">
-              Equilibrium Inhouse is an end-to-end RevOps systems studio for scaling B2B SaaS companies ($3M–$30M ARR). We build the connected revenue engine behind your sales team—integrating instant lead capture, automated multi-source research, and strict CRM governance so high-intent buyers are engaged in under 60 seconds.
+              Equilibrium Inhouse is an end-to-end RevOps systems studio for scaling B2B SaaS companies. We build the connected revenue engine behind your sales team—integrating instant lead capture, automated multi-source research, and strict CRM governance. By turning fragmented tools into one unified pipeline, we eliminate manual rep admin work, keep your customer data spotless, and ensure qualified buyers are met with an instant response.
             </p>
             <div className="pt-1 flex items-center space-x-2 text-xs text-[var(--text-secondary)]">
               <span className="px-2.5 py-1 rounded-md bg-white border border-[var(--border-subtle)] font-medium text-[var(--text-primary)]">
@@ -88,11 +88,11 @@ export const Footer: React.FC = () => {
               Core Capabilities
             </h4>
             <ul className="space-y-2.5 text-sm text-[var(--text-secondary)]">
-              <li className="hover:text-[var(--text-primary)] transition-colors">Clay 5-Vendor Waterfalls</li>
-              <li className="hover:text-[var(--text-primary)] transition-colors">Sub-60s Webhook Routers</li>
-              <li className="hover:text-[var(--text-primary)] transition-colors">HubSpot &amp; Salesforce Locks</li>
-              <li className="hover:text-[var(--text-primary)] transition-colors">Slack Real-Time Deal Desks</li>
-              <li className="hover:text-[var(--text-primary)] transition-colors">Secret-Shopper Audits</li>
+              <li className="hover:text-[var(--text-primary)] transition-colors">Automated Buyer Intelligence Engine</li>
+              <li className="hover:text-[var(--text-primary)] transition-colors">Instant Inbound Dispatch Pipeline</li>
+              <li className="hover:text-[var(--text-primary)] transition-colors">Deterministic Schema &amp; Data Governance</li>
+              <li className="hover:text-[var(--text-primary)] transition-colors">Interactive 1-Click Rep Alerting</li>
+              <li className="hover:text-[var(--text-primary)] transition-colors">Forensic Pipeline &amp; Latency Audit</li>
             </ul>
           </div>
 

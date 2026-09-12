@@ -116,7 +116,7 @@ export const HomePage: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="mt-6 text-base sm:text-lg text-[#3F3D56] max-w-xl leading-relaxed font-sans font-normal"
             >
-              MIT research reveals reps responding within 5 minutes are 21x more likely to qualify prospects. We engineer sub-60s webhook routing, automated waterfall enrichment, and CRM governance so your sales team locks in that window every single time.
+              MIT research reveals reps responding within 5 minutes are 21x more likely to qualify prospects. We engineer instant inbound dispatch, automated buyer intelligence, and deterministic CRM governance so your sales team locks in that window every single time.
             </motion.p>
 
             {/* Revision A Studio Introduction */}
