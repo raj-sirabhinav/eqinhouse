@@ -119,6 +119,18 @@ export const HomePage: React.FC = () => {
               MIT research reveals reps responding within 5 minutes are 21x more likely to qualify prospects. We engineer sub-60s webhook routing, automated waterfall enrichment, and CRM governance so your sales team locks in that window every single time.
             </motion.p>
 
+            {/* Revision A Studio Introduction */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.22 }}
+              className="hero-studio-intro max-w-2xl mt-4 mb-6 text-sm sm:text-base text-[#2E3440] leading-relaxed border-l-2 border-emerald-500 pl-4 bg-emerald-50/70 py-2.5 rounded-r shadow-2xs"
+            >
+              <p>
+                <strong className="text-[#0f172a] font-medium">Equilibrium Inhouse</strong> is an end-to-end RevOps systems studio for scaling B2B SaaS companies. We build the connected revenue engine behind your sales team—integrating instant lead capture, automated multi-source research, and strict CRM governance. By turning fragmented tools into one unified pipeline, we eliminate manual rep admin work, keep your customer data spotless, and ensure qualified buyers are met with an instant response.
+              </p>
+            </motion.div>
+
             {/* Primary CTA Group */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}

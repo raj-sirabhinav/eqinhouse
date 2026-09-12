@@ -44,8 +44,7 @@ export const Footer: React.FC = () => {
               </span>
             </div>
             <p className="text-sm text-[var(--text-secondary)] leading-relaxed max-w-sm">
-              Elite RevOps Systems Architecture Studio catering to venture-backed B2B scaleups ($3M–$30M ARR, $15k–$100k+ ACV). 
-              We engineer deterministic data plumbing, eradicate response latency, and automate inbound sales routing.
+              Equilibrium Inhouse is an end-to-end RevOps systems studio for scaling B2B SaaS companies ($3M–$30M ARR). We build the connected revenue engine behind your sales team—integrating instant lead capture, automated multi-source research, and strict CRM governance so high-intent buyers are engaged in under 60 seconds.
             </p>
             <div className="pt-1 flex items-center space-x-2 text-xs text-[var(--text-secondary)]">
               <span className="px-2.5 py-1 rounded-md bg-white border border-[var(--border-subtle)] font-medium text-[var(--text-primary)]">
