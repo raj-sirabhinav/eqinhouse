@@ -13,6 +13,7 @@ import {
   Mail,
   CheckCircle2
 } from 'lucide-react';
+import { TiltCard } from '../components/TiltCard';
 
 export const IntakePage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -290,7 +291,7 @@ export const IntakePage: React.FC = () => {
       </div>
 
       {/* Main Elevated Card */}
-      <div className="relative rounded-2xl border border-[var(--border-subtle)] bg-[#FAF8F5] shadow-subtle overflow-hidden">
+      <TiltCard maxTiltDeg={1.0} hoverEffect={true} className="relative rounded-2xl border border-[var(--border-subtle)] bg-[#FAF8F5] shadow-subtle overflow-hidden">
         
         {/* Accent Top Line */}
         <div className="h-1 w-full bg-[#6366F1]" />
@@ -906,7 +907,7 @@ export const IntakePage: React.FC = () => {
             )}
           </AnimatePresence>
         </div>
-      </div>
+      </TiltCard>
     </div>
   );
 };

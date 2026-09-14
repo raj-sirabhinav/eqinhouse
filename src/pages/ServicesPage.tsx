@@ -166,8 +166,11 @@ export const ServicesPage: React.FC = () => {
           SECTION 2: INTERACTIVE MODE TOGGLE & COMPARISON TABLE
          ========================================================================= */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="bg-white border border-[var(--border-subtle)] rounded-2xl p-6 sm:p-8 shadow-subtle">
-          
+        <TiltCard 
+          maxTiltDeg={1.5} 
+          hoverEffect={true} 
+          className="bg-white border border-[var(--border-subtle)] rounded-2xl p-6 sm:p-8 shadow-subtle"
+        >
           {/* Header & Toggle Controls */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-subtle)]">
             <div>
@@ -272,7 +275,7 @@ export const ServicesPage: React.FC = () => {
               Protect Inbound Conversion →
             </Link>
           </div>
-        </div>
+        </TiltCard>
       </section>
 
       {/* =========================================================================
@@ -303,14 +306,14 @@ export const ServicesPage: React.FC = () => {
                 key={tier.id}
                 onClick={() => setSelectedTier(tier.id)}
                 onMouseEnter={() => setHoveredTier(tier.id)}
-                hoverEffect={false}
+                hoverEffect={true}
+                maxTiltDeg={2.5}
                 style={{
-                  transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
-                  boxShadow: isFocused ? '0 10px 25px -5px rgba(99, 102, 241, 0.16)' : undefined,
+                  boxShadow: isFocused ? '0 12px 30px -5px rgba(99, 102, 241, 0.20)' : undefined,
                 }}
                 className={`p-7 flex flex-col justify-between relative cursor-pointer ${
                   isFocused
-                    ? 'border-2 border-[#6366F1] bg-[#FAF8F5] -translate-y-1'
+                    ? 'border-2 border-[#6366F1] bg-[#FAF8F5]'
                     : 'border border-[#E5DDD0] bg-white hover:border-[#d6cbbf]'
                 }`}
               >

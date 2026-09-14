@@ -18,6 +18,8 @@ import {
   Sparkles,
   TrendingUp
 } from 'lucide-react';
+import { triggerTelemetryBoost } from '../utils/telemetryBus';
+import { TiltCard } from '../components/TiltCard';
 
 export const HomePage: React.FC = () => {
   // Slider state: 0 to 60 minutes, default 42
@@ -110,14 +112,19 @@ export const HomePage: React.FC = () => {
               <span className="italic text-[#6366F1]">by 21x Past the 5-Minute Mark.</span>
             </motion.h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="mt-6 text-base sm:text-lg text-[#3F3D56] max-w-xl leading-relaxed font-sans font-normal"
-            >
-              MIT research reveals reps responding within 5 minutes are 21x more likely to qualify prospects. We engineer instant inbound dispatch, automated buyer intelligence, and deterministic CRM governance so your sales team locks in that window every single time.
-            </motion.p>
+            <div className="relative mt-6 max-w-xl">
+              {/* Seamless feather wash that softens background grid and particles behind this text block */}
+              <div 
+                className="pointer-events-none absolute -inset-x-5 -inset-y-3 rounded-2xl bg-[#FAF8F5]/90 backdrop-blur-[2px] -z-10 shadow-[0_0_28px_20px_#FAF8F5]" 
+                aria-hidden="true" 
+              />
+              <p
+                id="hero-research-text"
+                className="text-base sm:text-lg text-[#3F3D56] leading-relaxed font-sans font-normal relative z-10"
+              >
+                MIT research reveals reps responding within 5 minutes are 21x more likely to qualify prospects. We engineer instant inbound dispatch, automated buyer intelligence, and deterministic CRM governance so your sales team locks in that window every single time.
+              </p>
+            </div>
 
             {/* Primary CTA Group */}
             <motion.div
@@ -144,7 +151,12 @@ export const HomePage: React.FC = () => {
 
             {/* Micro proof ticker */}
             <div className="mt-8 pt-6 border-t border-[#E6DFD5]/70 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-mono text-[#3F3D56]">
-              <span className="flex items-center gap-1.5">
+              <span 
+                onMouseEnter={() => triggerTelemetryBoost(3.0)}
+                onMouseLeave={() => triggerTelemetryBoost(1.0)}
+                className="flex items-center gap-1.5 cursor-pointer hover:text-[#000000] transition-colors"
+                title="Hover to accelerate telemetry pipeline"
+              >
                 <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
                 <span>Deterministic &lt;60s SLA</span>
               </span>
@@ -166,7 +178,7 @@ export const HomePage: React.FC = () => {
             transition={{ duration: 0.5, delay: 0.15 }}
             className="lg:col-span-5 w-full flex flex-col justify-start"
           >
-            <div className="rounded-2xl border border-[#e2e8f0] bg-white/95 backdrop-blur-xs p-5 sm:p-6 shadow-[0_8px_30px_rgb(0,0,0,0.06)] relative overflow-hidden">
+            <TiltCard maxTiltDeg={1.8} hoverEffect={true} className="rounded-2xl border border-[#e2e8f0] bg-white/95 backdrop-blur-xs p-5 sm:p-6 shadow-[0_8px_30px_rgb(0,0,0,0.06)] relative overflow-hidden">
               
               {/* Card Header */}
               <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#f1f5f9]">
@@ -201,7 +213,12 @@ export const HomePage: React.FC = () => {
                       <span className="text-xs font-semibold text-[#0f172a] tracking-tight">
                         Pillar 01: Inbound Webhook Routing
                       </span>
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-cyan-50 text-cyan-700 border border-cyan-200 shrink-0 font-semibold">
+                      <span 
+                        onMouseEnter={() => triggerTelemetryBoost(3.2)}
+                        onMouseLeave={() => triggerTelemetryBoost(1.0)}
+                        className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-cyan-50 text-cyan-700 border border-cyan-200 shrink-0 font-semibold cursor-pointer hover:bg-cyan-100 transition-colors"
+                        title="Hover to accelerate telemetry pipeline"
+                      >
                         &lt;60s SLA
                       </span>
                     </div>
@@ -342,7 +359,7 @@ export const HomePage: React.FC = () => {
                   GUARANTEED DETERMINISTIC SLA
                 </span>
               </div>
-            </div>
+            </TiltCard>
           </motion.div>
 
         </div>
@@ -371,9 +388,13 @@ export const HomePage: React.FC = () => {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="rounded-2xl border border-[#E6DFD5] bg-[#FAF8F5] p-6 sm:p-10 shadow-[0_4px_24px_rgba(63,61,86,0.04)] relative overflow-hidden"
         >
-          {/* Top Label & Presets */}
+          <TiltCard
+            maxTiltDeg={1.5}
+            hoverEffect={true}
+            className="rounded-2xl border border-[#E6DFD5] bg-[#FAF8F5] p-6 sm:p-10 shadow-[0_4px_24px_rgba(63,61,86,0.04)] relative overflow-hidden"
+          >
+            {/* Top Label & Presets */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-[#E6DFD5] mb-8">
             <div>
               <div className="flex items-center gap-2 text-xs font-mono font-semibold text-[#6366F1] uppercase tracking-wider">
@@ -389,7 +410,10 @@ export const HomePage: React.FC = () => {
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
-                onClick={() => setLatencyMinutes(1)}
+                onClick={() => {
+                  setLatencyMinutes(1);
+                  triggerTelemetryBoost(3.2, 2500);
+                }}
                 className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-all ${
                   latencyMinutes === 1
                     ? 'bg-[#6366F1] text-white shadow-xs font-semibold'
@@ -400,7 +424,10 @@ export const HomePage: React.FC = () => {
               </button>
               <button
                 type="button"
-                onClick={() => setLatencyMinutes(10)}
+                onClick={() => {
+                  setLatencyMinutes(10);
+                  triggerTelemetryBoost(1.5, 2000);
+                }}
                 className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-all ${
                   latencyMinutes === 10
                     ? 'bg-[#6366F1] text-white shadow-xs font-semibold'
@@ -411,7 +438,10 @@ export const HomePage: React.FC = () => {
               </button>
               <button
                 type="button"
-                onClick={() => setLatencyMinutes(42)}
+                onClick={() => {
+                  setLatencyMinutes(42);
+                  triggerTelemetryBoost(0.5, 2000);
+                }}
                 className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-all ${
                   latencyMinutes === 42
                     ? 'bg-[#6366F1] text-white shadow-xs font-semibold'
@@ -442,7 +472,14 @@ export const HomePage: React.FC = () => {
                 min="1"
                 max="60"
                 value={latencyMinutes}
-                onChange={(e) => setLatencyMinutes(parseInt(e.target.value))}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value);
+                  setLatencyMinutes(val);
+                  const speedBoost = Math.max(0.4, 3.2 - (val / 60) * 2.7);
+                  triggerTelemetryBoost(speedBoost);
+                }}
+                onMouseUp={() => triggerTelemetryBoost(1.0, 1500)}
+                onTouchEnd={() => triggerTelemetryBoost(1.0, 1500)}
                 className="w-full h-2.5 bg-[#E6DFD5] rounded-lg appearance-none cursor-pointer accent-[#6366F1] focus:outline-none"
               />
               <div className="flex justify-between text-[11px] font-mono text-[#3F3D56]/70 mt-2">
@@ -507,6 +544,7 @@ export const HomePage: React.FC = () => {
               </Link>
             </div>
           </div>
+          </TiltCard>
         </motion.div>
       </section>
 
@@ -514,7 +552,7 @@ export const HomePage: React.FC = () => {
           SECTION 2: DETERMINISTIC INBOUND PIPELINE ARCHITECTURE SIMULATOR
          ========================================================================= */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="rounded-2xl border border-[#E6DFD5] bg-[#FAF8F5] p-6 sm:p-10 shadow-[0_4px_24px_rgba(63,61,86,0.04)] relative overflow-hidden">
+        <TiltCard maxTiltDeg={1.5} hoverEffect={true} className="rounded-2xl border border-[#E6DFD5] bg-[#FAF8F5] p-6 sm:p-10 shadow-[0_4px_24px_rgba(63,61,86,0.04)] relative overflow-hidden">
           
           <div className="relative z-10 space-y-8">
             {/* Top Row: Section Header & Mode Toggle */}
@@ -1046,7 +1084,7 @@ export const HomePage: React.FC = () => {
               </Link>
             </div>
           </div>
-        </div>
+        </TiltCard>
       </section>
 
       {/* =========================================================================
@@ -1065,7 +1103,7 @@ export const HomePage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
           {/* Left Card: Legacy Manual SDR Loop */}
-          <div className="p-6 sm:p-8 rounded-2xl border border-rose-200 bg-[#FAF8F5] space-y-6 shadow-subtle">
+          <TiltCard maxTiltDeg={2.0} hoverEffect={true} className="p-6 sm:p-8 rounded-2xl border border-rose-200 bg-[#FAF8F5] space-y-6 shadow-subtle">
             <div className="flex items-center justify-between pb-4 border-b border-rose-200/80">
               <div className="flex items-center space-x-3">
                 <div className="h-9 w-9 rounded-lg bg-rose-100 flex items-center justify-center text-rose-700">
@@ -1118,10 +1156,10 @@ export const HomePage: React.FC = () => {
             <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-900 font-mono">
               <strong>OPERATIONAL OUTCOME:</strong> 391% decrease in qualification probability &bull; 15–20 rep hours/week wasted.
             </div>
-          </div>
+          </TiltCard>
 
           {/* Right Card: Deterministic Webhook Architecture */}
-          <div className="p-6 sm:p-8 rounded-2xl border border-[#6366F1]/40 bg-[#FAF8F5] space-y-6 shadow-subtle ring-1 ring-[#6366F1]/20">
+          <TiltCard maxTiltDeg={2.0} hoverEffect={true} className="p-6 sm:p-8 rounded-2xl border border-[#6366F1]/40 bg-[#FAF8F5] space-y-6 shadow-subtle ring-1 ring-[#6366F1]/20">
             <div className="flex items-center justify-between pb-4 border-b border-[#E6DFD5]">
               <div className="flex items-center space-x-3">
                 <div className="h-9 w-9 rounded-lg bg-[#6366F1]/10 flex items-center justify-center text-[#6366F1]">
@@ -1149,16 +1187,16 @@ export const HomePage: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <span className="h-5 w-5 rounded-full bg-[#6366F1]/10 text-[#6366F1] flex items-center justify-center text-[10px] font-mono shrink-0 font-bold">2</span>
                 <div>
-                  <strong className="text-[#000000] font-semibold block">Multi-Source Waterfall Cascade &bull; Zero Rep Research Overhead:</strong>
-                  Clay sequentially pings Apollo, Prospeo, and Datagma until verified direct mobile and work email are secured (94.8% match rate), freeing 15+ hours/rep/week.
+                  <strong className="text-[#000000] font-semibold block">Cascade Enrichment Waterfall &bull; 94.8% Direct Contact Match:</strong>
+                  Multi-vendor cascade (Apollo &rarr; Prospeo &rarr; Datagma) enriches mobile numbers and executive work emails automatically.
                 </div>
               </div>
 
               <div className="flex items-start space-x-3">
                 <span className="h-5 w-5 rounded-full bg-[#6366F1]/10 text-[#6366F1] flex items-center justify-center text-[10px] font-mono shrink-0 font-bold">3</span>
                 <div>
-                  <strong className="text-[#000000] font-semibold block">Domain Deduplication &amp; Locked Schemas &bull; 100% CRM Cleanliness:</strong>
-                  Exact root-domain matching in Salesforce/HubSpot prevents duplicate records, enforcing strict picklists and deterministic rep assignment.
+                  <strong className="text-[#000000] font-semibold block">CRM Governance Engine &bull; Zero Duplicate Schema Drift:</strong>
+                  Root-domain deduplication, automated territory round-robin, and strict picklist enforcement keep HubSpot and Salesforce pristine.
                 </div>
               </div>
 
@@ -1174,7 +1212,7 @@ export const HomePage: React.FC = () => {
             <div className="p-4 rounded-xl bg-[#047857]/[0.08] border border-[#047857]/25 text-xs text-[#065F46] font-mono">
               <strong>OPERATIONAL OUTCOME:</strong> Zero manual research hours &bull; 6x increase in fast-responder conversion win rate &bull; ~$420k/yr pipeline protected.
             </div>
-          </div>
+          </TiltCard>
 
         </div>
       </section>
@@ -1183,7 +1221,7 @@ export const HomePage: React.FC = () => {
           SECTION 4: CALL TO ACTION FOOTER BANNER
          ========================================================================= */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="rounded-2xl border border-[#E6DFD5] bg-[#FAF8F5] p-8 sm:p-12 text-center space-y-6 shadow-subtle relative overflow-hidden">
+        <TiltCard maxTiltDeg={1.5} hoverEffect={true} className="rounded-2xl border border-[#E6DFD5] bg-[#FAF8F5] p-8 sm:p-12 text-center space-y-6 shadow-subtle relative overflow-hidden">
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#E6DFD5]/40 border border-[#E6DFD5] text-xs font-mono text-[#3F3D56]">
             <span>SYSTEMS_AUDIT_PROGRAM // 7-DAY DELIVERY</span>
           </div>
@@ -1212,7 +1250,7 @@ export const HomePage: React.FC = () => {
               <span>View Productized Sprints &amp; Pricing</span>
             </Link>
           </div>
-        </div>
+        </TiltCard>
       </section>
 
     </div>

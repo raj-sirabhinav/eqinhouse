@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TiltCard } from '../components/TiltCard';
+import { triggerTelemetryBoost } from '../utils/telemetryBus';
 
 export const StackPage: React.FC = () => {
   // Card A: Make.com simulation state
@@ -44,6 +45,7 @@ export const StackPage: React.FC = () => {
   // Trigger Clay waterfall step sequence
   const runWaterfallSimulation = () => {
     if (waterfallActive) return;
+    triggerTelemetryBoost(3.2, 4200);
     setWaterfallActive(true);
     setWaterfallStep(1);
 
@@ -60,12 +62,14 @@ export const StackPage: React.FC = () => {
   const triggerMakePulse = () => {
     setIsMakePulsing(true);
     setMakeLatency(Math.floor(Math.random() * 30) + 115);
+    triggerTelemetryBoost(3.2, 2000);
     setTimeout(() => setIsMakePulsing(false), 2000);
   };
 
   // Trigger Slack simulation sequence (1.2s total live flow)
   const handleSimulateAlert = () => {
     if (isAlertSimulating) return;
+    triggerTelemetryBoost(3.2, 2500);
     setIsAlertSimulating(true);
     setAlertButtonState('dispatching');
     setIsDealClaimed(false);
