@@ -106,8 +106,8 @@ export const HomePage: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="text-4xl sm:text-5xl lg:text-6xl font-serif text-[#000000] leading-[1.08] tracking-tight font-normal"
             >
-              Your inbound sales form is silently destroying{' '}
-              <span className="italic text-[#6366F1]">a 21x lead qualification advantage.</span>
+              Legacy Inbound Routing Degrades Prospect Qualification{' '}
+              <span className="italic text-[#6366F1]">by 21x Past the 5-Minute Mark.</span>
             </motion.h1>
 
             <motion.p
