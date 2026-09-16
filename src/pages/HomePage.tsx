@@ -97,7 +97,7 @@ export const HomePage: React.FC = () => {
               className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#E6DFD5]/40 border border-[#E6DFD5] text-xs font-mono text-[#3F3D56] mb-6 shadow-xs self-start"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-[#6366F1] animate-ping" />
-              <span className="font-semibold text-[#000000]">SPEED-TO-LEAD &amp; REVOPS ARCHITECTURE</span>
+              <span className="font-semibold text-[#000000]">BUYER INTELLIGENCE &amp; REVOPS ARCHITECTURE</span>
               <span className="text-[#94a3b8]">&bull;</span>
               <span>B2B SAAS ($3M–$30M ARR)</span>
             </motion.div>

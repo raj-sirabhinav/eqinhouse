@@ -9,7 +9,7 @@ export const Navbar: React.FC = () => {
   const location = useLocation();
 
   const navLinks = [
-    { label: 'Speed-to-Lead Hub', path: '/' },
+    { label: 'Pipeline Intelligence Hub', path: '/' },
     { label: 'Services', path: '/services' },
     { label: 'Architecture Stack', path: '/stack' },
   ];

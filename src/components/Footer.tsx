@@ -61,7 +61,7 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2.5 text-sm">
               <li>
                 <Link to="/" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
-                  Speed-to-Lead Hub
+                  Pipeline Intelligence Hub
                 </Link>
               </li>
               <li>
