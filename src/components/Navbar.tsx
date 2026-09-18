@@ -86,7 +86,7 @@ export const Navbar: React.FC = () => {
               to="/" 
               onClick={handleLogoClick}
               className="flex items-center space-x-3 group cursor-pointer"
-              title={location.pathname === '/' ? 'Click to expand emblem' : 'Go to Home'}
+              title={location.pathname === '/' ? 'Click to expand' : 'Go to Home'}
             >
               <img 
                 src="/logo.jpg" 
@@ -231,16 +231,13 @@ export const Navbar: React.FC = () => {
               </button>
 
               <div className="relative z-10 flex flex-col items-center space-y-6">
-                {/* Enlarged Company Emblem */}
+                {/* Enlarged Company Logo */}
                 <div className="relative p-3.5 rounded-2xl bg-white border border-[#E5DDD0] shadow-md">
                   <img 
                     src="/logo.jpg" 
                     alt="Equilibrium Inhouse eqinhouse" 
                     className="h-28 w-28 sm:h-36 sm:w-36 rounded-xl object-contain" 
                   />
-                  <div className="absolute -bottom-2.5 -right-2.5 px-2 py-0.5 rounded-md bg-[#0F172A] text-[10px] font-mono font-semibold text-white tracking-widest border border-slate-700 shadow-xs">
-                    EMBLEM
-                  </div>
                 </div>
 
                 {/* Typography: [Equilibrium Inhouse] eqinhouse */}
