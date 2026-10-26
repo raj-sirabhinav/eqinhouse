@@ -44,7 +44,7 @@ export const Footer: React.FC = () => {
               </span>
             </div>
             <p className="text-sm text-[var(--text-secondary)] leading-relaxed max-w-sm">
-              Equilibrium Inhouse is an end-to-end RevOps systems studio for scaling B2B SaaS companies. We build the connected revenue engine behind your sales team—integrating instant lead capture, automated multi-source research, and strict CRM governance. By turning fragmented tools into one unified pipeline, we eliminate manual rep admin work, keep your customer data spotless, and ensure qualified buyers are met with an instant response.
+              Equilibrium Inhouse engineers deterministic revenue infrastructure for venture-backed B2B SaaS scaleups ($3M–$30M ARR). We eliminate speed-to-lead latency, manual SDR research loops, and CRM data corruption by deploying locked production pipelines. From sub-60s webhook dispatch and multi-vendor waterfall enrichment to strict schema governance and interactive 1-click rep alerting, our systems eliminate dropped packet decay and deliver verified operational cash savings.
             </p>
             <div className="pt-1 flex items-center space-x-2 text-xs text-[var(--text-secondary)]">
               <span className="px-2.5 py-1 rounded-md bg-white border border-[var(--border-subtle)] font-medium text-[var(--text-primary)]">
@@ -88,11 +88,10 @@ export const Footer: React.FC = () => {
               Core Capabilities
             </h4>
             <ul className="space-y-2.5 text-sm text-[var(--text-secondary)]">
-              <li className="hover:text-[var(--text-primary)] transition-colors">Automated Buyer Intelligence Engine</li>
               <li className="hover:text-[var(--text-primary)] transition-colors">Instant Inbound Dispatch Pipeline</li>
+              <li className="hover:text-[var(--text-primary)] transition-colors">Automated Buyer Intelligence Engine</li>
               <li className="hover:text-[var(--text-primary)] transition-colors">Deterministic Schema &amp; Data Governance</li>
               <li className="hover:text-[var(--text-primary)] transition-colors">Interactive 1-Click Rep Alerting</li>
-              <li className="hover:text-[var(--text-primary)] transition-colors">Forensic Pipeline &amp; Latency Audit</li>
             </ul>
           </div>
 
@@ -122,7 +121,7 @@ export const Footer: React.FC = () => {
               </a>
               <div className="pt-2">
                 <span className="inline-block text-xs font-medium text-emerald-900 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
-                  2 Sprint Slots Available for Q3
+                  2 Deployment Slots Available This Month
                 </span>
               </div>
             </div>

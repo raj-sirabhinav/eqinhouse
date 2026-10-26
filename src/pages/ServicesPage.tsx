@@ -65,8 +65,8 @@ export const ServicesPage: React.FC = () => {
   const tiers = [
     {
       id: 'tier-1' as const,
-      label: 'Tier 1 • 7 Business Days',
-      title: 'GTM Architecture Diagnostic',
+      label: 'Stage 1 • 7 Business Days',
+      title: 'Forensic Pipeline & Latency Audit',
       desc: 'Forensic technical audit of your inbound funnel, CRM schema hygiene, and speed-to-lead routing latency.',
       price: '$3,500',
       period: 'Fixed Fee',
@@ -79,35 +79,35 @@ export const ServicesPage: React.FC = () => {
         'Prioritized 90-day technical remediation backlog with risk scoring.',
       ],
       antiScope: 'NO production code deployment • NO ad-hoc tool setup • NO cold outreach copywriting.',
-      slaGuarantee: 'Strict 7-Day Turnaround • Fully Deductible Against Core Sprint',
+      slaGuarantee: 'Strict 7-Day Turnaround • System Health Certification Included',
       ctaText: 'Book Diagnostic Slot',
       ctaHref: '/intake?tier=diagnostic',
     },
     {
       id: 'tier-2' as const,
-      label: 'Tier 2 • 30 Calendar Days',
-      title: 'Core GTM Engine Sprint',
-      desc: 'Turnkey engineering deployment. We build and hardwire your Clay waterfall, routing engine, and CRM schema lock.',
+      label: '★ MOST SELECTED • Stage 2 • 30 Calendar Days',
+      title: 'Deterministic Pipeline Deployment',
+      desc: 'Turnkey engineering deployment. We install the 4 Locked Production Engines directly into your revenue stack.',
       price: '$12,500',
       period: 'Fixed Fee',
       timeline: 'Production deployment in 30 days',
       icon: Layers,
       deliverables: [
-        'Clay waterfall enrichment cascade (3–5 vendors: Apollo, Prospeo, Datagma).',
-        'Sub-60s SLA webhook & round-robin routing engine (Make / serverless).',
-        'Custom lifecycle stage & pipeline stage validation guards.',
-        'Bidirectional CRM <-> SEP sync + interactive Slack deal-desk alerting.',
+        'Instant Inbound Dispatch Pipeline: Sub-60s SLA webhook & dynamic round-robin routing engine (Make / serverless).',
+        'Automated Buyer Intelligence Engine: Multi-vendor waterfall enrichment cascade (Clay, Apollo, Prospeo, Datagma).',
+        'Deterministic Schema & Data Governance: Custom lifecycle stage guards, write-locks, and picklist normalizations.',
+        'Interactive 1-Click Rep Alerting: Bidirectional CRM sync + interactive sub-60s Slack deal-desk alerting.',
       ],
       antiScope: 'NO front-end CMS web builds • NO manual SDR list generation • NO custom internal software coding.',
       slaGuarantee: '30-Day Fixed-Scope Delivery • Zero Billable Hour Overages',
-      ctaText: 'Deploy Core Engine',
+      ctaText: 'Deploy Production Engines',
       ctaHref: '/intake?tier=core-engine',
     },
     {
       id: 'tier-3' as const,
-      label: 'Tier 3 • Ongoing Retainer',
-      title: 'Fractional Systems Architecture',
-      desc: 'Continuous architecture for scaleups shipping new product lines, territories, and multi-channel motions.',
+      label: 'Stage 3 • Ongoing Retainer',
+      title: 'Active Pipeline Safeguard Retainer',
+      desc: 'Dedicated systems governance and schema protection for scaleups shipping new product lines, territories, and multi-channel motions.',
       price: '$6,500',
       period: '/ Month',
       timeline: 'Quarterly commitment • Async SLA',
@@ -119,8 +119,8 @@ export const ServicesPage: React.FC = () => {
         'Bi-weekly 45-min strategic sync with CRO or VP Revenue Operations.',
       ],
       antiScope: 'NO operational triage backlog • NO real-time emergency ticketing • Max 1 strategic architecture update per sprint.',
-      slaGuarantee: 'Quarterly Commitment • 1 Architecture Sprint Per Month',
-      ctaText: 'Retain Architecture Team',
+      slaGuarantee: 'Quarterly Commitment • Continuous Systems Safeguard',
+      ctaText: 'Retain Systems Architecture',
       ctaHref: '/intake?tier=fractional',
     },
   ];
@@ -139,7 +139,7 @@ export const ServicesPage: React.FC = () => {
           className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#f3ede4] border border-[var(--border-subtle)] text-xs font-medium text-[var(--text-secondary)] mb-6 font-sans"
         >
           <Shield className="h-3.5 w-3.5 text-[#6366F1]" />
-          <span>Fixed-Fee Sprints &bull; Strict Deliverables &bull; Zero Scope Creep</span>
+          <span>Fixed-Fee Engineering &bull; Strict Deliverables &bull; Zero Scope Creep</span>
         </motion.div>
 
         <motion.h1
@@ -148,7 +148,7 @@ export const ServicesPage: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-4xl sm:text-6xl font-serif text-[var(--text-primary)] tracking-tight leading-tight font-normal"
         >
-          Productized Systems Sprints.{' '}
+          Deterministic Revenue Infrastructure.{' '}
           <span className="italic text-[#6366F1]">Zero Billable Hour Traps.</span>
         </motion.h1>
 
@@ -158,7 +158,7 @@ export const ServicesPage: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mt-5 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed max-w-2xl mx-auto font-sans"
         >
-          No open-ended consulting or junior retainer bloat. Three structured engineering deliverables designed to eliminate pipeline leakage.
+          No open-ended consulting or junior retainer bloat. Three structured engineering stages designed to eliminate pipeline leakage.
         </motion.p>
       </section>
 
@@ -284,10 +284,10 @@ export const ServicesPage: React.FC = () => {
       <section className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-serif text-[var(--text-primary)] tracking-tight font-normal">
-            Transparent Sprints. Bound By Contract.
+            Three-Stage Engineering Roadmap. Bound By Contract.
           </h2>
           <p className="mt-2 text-base text-[var(--text-secondary)] max-w-xl mx-auto font-sans">
-            Clear deliverables, established delivery timelines, and strict anti-scope definitions to guarantee results.
+            Clear deliverables, locked execution timelines, and strict anti-scope definitions to guarantee results.
           </p>
         </div>
 
