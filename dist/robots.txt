@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://eqinhouse.com/sitemap.xml
+Sitemap: https://www.eqinhouse.com/sitemap.xml
