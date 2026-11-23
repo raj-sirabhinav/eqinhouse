@@ -25,8 +25,8 @@ export const ServicesPage: React.FC = () => {
     },
     {
       metric: 'Enrichment Data Coverage',
-      manual: '48% (Single database lookup, incomplete data)',
-      deterministic: '94.8% (3-to-5 tier waterfall cascade)',
+      manual: '~55–65% (Single-vendor lookup & manual SDR research)',
+      deterministic: '95%+ (Multi-vendor Clay waterfall & root-domain deduplication)',
       detail: 'Multi-vendor fallback (Apollo -> Prospeo -> Datagma) guarantees verified direct dial & email.',
     },
     {
@@ -48,10 +48,10 @@ export const ServicesPage: React.FC = () => {
       detail: 'SDRs focus entirely on qualified buyer engagement rather than cross-referencing LinkedIn.',
     },
     {
-      metric: 'Annual Revenue Salvaged',
-      manual: '$0 (Continuous 30%+ pipeline leakage)',
-      deterministic: '+$420,000 / year (Protected conversion)',
-      detail: 'Modeled on a standard B2B SaaS $25k ACV with 40 high-intent demo requests per month.',
+      metric: 'Pure Economic Recovery',
+      manual: '-$454,800 / year (Continuous 30%+ pipeline leakage, 1.5 FTE SDR payroll drag & API waste)',
+      deterministic: '+$454,800 / year ($360k pipeline recovery + $75k SDR payroll reclaimed + $19.8k API salvage)',
+      detail: 'Modeled on a standard B2B SaaS baseline ($25k ACV, 40 high-intent inbound demo requests/month).',
     },
   ];
 
@@ -261,12 +261,17 @@ export const ServicesPage: React.FC = () => {
             </table>
           </div>
 
+          {/* Summary Footnote / Caption */}
+          <p className="mt-4 text-xs text-[var(--text-secondary)] leading-relaxed font-sans border-t border-[var(--border-subtle)] pt-4">
+            Economic recovery modeled on a standard B2B SaaS baseline ($25k ACV, 40 high-intent inbound demo requests/month): eliminates continuous 30%+ speed-to-lead pipeline leakage (+$360,000/yr ARR), reclaims 1.5 FTE in manual SDR research payroll ($75,000/yr), and slashes redundant enrichment API credit burn by 55% ($19,800/yr).
+          </p>
+
           {/* Banner */}
-          <div className="mt-6 p-4 rounded-xl bg-[#FAF8F5] border border-[var(--border-subtle)] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-sans">
+          <div className="mt-4 p-4 rounded-xl bg-[#FAF8F5] border border-[var(--border-subtle)] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-sans">
             <span className="text-[var(--text-secondary)]">
               {comparisonMode === 'manual'
                 ? 'Manual SDR bottlenecks lead to a 391% decrease in qualification rates according to Harvard Business Review.'
-                : 'Deterministic automated data plumbing secures sub-60s response times and recaptures up to $420k/yr in pipeline.'}
+                : 'Deterministic automated data plumbing secures sub-60s response times and delivers +$454,800/yr in pure economic recovery.'}
             </span>
             <Link
               to="/intake"

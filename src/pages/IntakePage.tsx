@@ -787,7 +787,7 @@ export const IntakePage: React.FC = () => {
 
                           <div className="text-[11px] font-mono text-[#64748B] flex items-center gap-1.5">
                             <Lock className="h-3.5 w-3.5 text-[#64748B] shrink-0" />
-                            <span>Direct integration with Cal.com &bull; Calendar invite + Zoom link dispatched instantly</span>
+                            <span>Direct integration with Cal.com &bull; Calendar invite + Google Meet link dispatched instantly</span>
                           </div>
                         </div>
                       </>
