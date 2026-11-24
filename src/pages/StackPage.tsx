@@ -312,7 +312,7 @@ export const StackPage: React.FC = () => {
                 <div className="flex items-center justify-between gap-2 pt-1 border-t border-[#f0eae1]">
                   <div className="flex items-center gap-1.5 min-w-0">
                     <span className="px-1.5 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider bg-[#047857]/[0.12] text-[#047857] shrink-0">eqinhouse</span>
-                    <span className="text-[#047857] font-semibold truncate">Sequential Multi-Source Cascade: 94.8% Match Rate</span>
+                    <span className="text-[#047857] font-semibold truncate">Sequential Multi-Source Cascade: 95%+ Match Rate</span>
                   </div>
                   <CheckCircle2 className="h-3.5 w-3.5 text-[#059669] shrink-0" />
                 </div>
@@ -388,7 +388,7 @@ export const StackPage: React.FC = () => {
             {/* Bottom Metadata & ROI Footer */}
             <div className="mt-6 pt-4 border-t border-[var(--border-subtle)] space-y-3">
               <div className="flex items-center justify-between text-xs text-[var(--text-secondary)] font-sans">
-                <span>Overall Match Rate: 94.8%</span>
+                <span>Overall Match Rate: 95%+</span>
                 <span className="text-[var(--text-primary)] font-semibold">Zero SDR Research Overhead</span>
               </div>
               <div className="p-2.5 rounded-lg bg-[#0F172A] border border-white/10 flex items-center justify-between font-mono text-xs shadow-xs">

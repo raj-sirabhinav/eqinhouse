@@ -166,7 +166,7 @@ export const HomePage: React.FC = () => {
               </span>
               <span className="flex items-center gap-1.5">
                 <Sparkles className="h-3.5 w-3.5 text-amber-600" />
-                <span>94.8% Match Rate</span>
+                <span>95%+ Match Rate</span>
               </span>
             </div>
           </div>
@@ -251,7 +251,7 @@ export const HomePage: React.FC = () => {
                         Pillar 02: Automated Waterfall Enrichment
                       </span>
                       <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-amber-50 text-amber-700 border border-amber-200 shrink-0 font-semibold">
-                        94.8% Match
+                        95%+ Match
                       </span>
                     </div>
                     <p className="text-[11px] text-[#64748b] mt-0.5 leading-snug">
@@ -903,7 +903,7 @@ export const HomePage: React.FC = () => {
 
                 <div className="mt-4 pt-2.5 border-t border-[#E6DFD5] flex items-center justify-between text-[10px] font-mono text-[#3F3D56]/60">
                   <span>CASCADE: 3-TIER</span>
-                  <span className="text-[#6366F1] font-semibold">MATCH: 94.8%</span>
+                  <span className="text-[#6366F1] font-semibold">MATCH: 95%+</span>
                 </div>
               </div>
 
@@ -1187,7 +1187,7 @@ export const HomePage: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <span className="h-5 w-5 rounded-full bg-[#6366F1]/10 text-[#6366F1] flex items-center justify-center text-[10px] font-mono shrink-0 font-bold">2</span>
                 <div>
-                  <strong className="text-[#000000] font-semibold block">Cascade Enrichment Waterfall &bull; 94.8% Direct Contact Match:</strong>
+                  <strong className="text-[#000000] font-semibold block">Cascade Enrichment Waterfall &bull; 95%+ Direct Contact Match:</strong>
                   Multi-vendor cascade (Apollo &rarr; Prospeo &rarr; Datagma) enriches mobile numbers and executive work emails automatically.
                 </div>
               </div>
